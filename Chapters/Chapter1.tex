@@ -17,280 +17,129 @@
 
 %----------------------------------------------------------------------------------------
 
-%\section{Introducción}
+En este capítulo se introduce la problemática que motivó el presente trabajo, seguida de una breve descripción de la solución propuesta. 
+A continuación, se expone el estado del arte de las tecnologías aplicadas. 
+Finalmente, se detallan el alcance y los requerimientos necesarios para su implementación.
 
 %----------------------------------------------------------------------------------------
-\section{Aprendiendo \LaTeX{}}
+\section{Introducción a la problemática}
 
-\LaTeX{} no es \textsc{WYSIWYG} (What You See is What You Get), a diferencia de los procesadores de texto como Microsoft Word o Pages de Apple o incluso LibreOffice en el mundo open-source. En lugar de ello, un documento escrito para \LaTeX{} es en realidad un archivo de texto simple o llano que \emph{no contiene formato} . Nosotros le decimos a \LaTeX{} cómo deseamos que se aplique el formato en el documento final escribiendo comandos simples entre el texto, por ejemplo, si quiero usar texto en itálicas para dar énfasis, escribo \verb|\it{texto}| y pongo el texto que quiero en itálicas entre medio de las llaves. Esto significa que \LaTeX{} es un lenguaje del tipo \enquote{mark-up}, muy parecido a HTML.
+En un entorno empresarial, la eficiencia en la búsqueda de información es crucial para la
+productividad y el rendimiento de los empleados. Sin embargo, con la creciente cantidad de
+datos y documentos disponibles, encontrar información específica de manera rápida y precisa
+puede convertirse en un desafío.
 
-\subsection{Una introducción (no tan corta) a \LaTeX{}}
-
-Si sos nuevo en \LaTeX{}, hay un muy buen libro electrónico - disponible gratuitamente en Internet como un archivo PDF - llamado, \enquote{A (not so short) Introduction to \LaTeX{}}. El título del libro es generalmente acortado a simplemente \emph{lshort}. Puede descargar la versión más reciente en inglés (ya que se actualiza de vez en cuando) desde aquí:
-\url{http://www.ctan.org/tex-archive/info/lshort/english/lshort.pdf}
-
-Se puede encontrar la versión en español en la lista en esta página: \url{http://www.ctan.org/tex-archive/info/lshort/}
-
-\subsubsection{Una subsubsección}
-
-Acá tiene un ejemplo de una ``subsubsección'' que es el cuarto nivel de ordenamiento del texto, después de capítulo, sección y subsección.  Como se puede ver, las subsubsecciones no van numeradas en el cuerpo del documento ni en el índice.  El formato está definido por la plantilla y no debe ser modificado.
-
-\subsection{Guía matemática rápida para \LaTeX{}}
-
-Si estás escribiendo un documento con mucho contenido matemático, entonces es posible que desees leer el documento de la AMS (American Mathematical Society) llamado, \enquote{A Short Math Guide for \LaTeX{}}. Se puede encontrar en línea en el siguiente link: \url{http://www.ams.org/tex/amslatex.html} en la sección \enquote{Additional Documentation} hacia la parte inferior de la página.
+A lo largo de mi experiencia en la empresa donde me desempeño, he observado cómo la abundancia 
+de fuentes de información puede, paradójicamente, dificultar el trabajo. Existen múltiples 
+repositorios de documentos, políticas y datos históricos, pero la falta de centralización y la 
+dificultad para identificar la fuente correcta suelen traducirse en pérdidas de tiempo significativas. 
+En muchas ocasiones, he dedicado más tiempo a la búsqueda de información que a la ejecución de las tareas 
+en sí, lo que afecta tanto la productividad como la efectividad en la toma de decisiones.
 
 
 %----------------------------------------------------------------------------------------
+\section{Marco de la propuesta}
 
-\section{Utilizando esta plantilla}
+Un chatbot especializado ofrece una solución prometedora al permitir a los usuarios realizar 
+consultas en lenguaje natural y obtener respuestas de manera instantánea. Mientras que otros sistemas 
+de inteligencia artificial ampliamente conocidos y utilizados, como ChatGPT o Microsoft Copilot, 
+destacan en su capacidad para generar respuestas generales basadas en un amplio conocimiento del 
+lenguaje, el presente trabajo se distingue por su capacidad para trabajar con documentos altamente 
+específicos (y potencialmente privados). Esto le permite ofrecer respuestas adaptadas al contexto 
+interno de la organización, las cuales no podrían obtenerse mediante el uso de los chatbots de 
+propósito general disponibles en el mercado.
 
-Si estás familiarizado con \LaTeX{}, entonces podés explorar la estructura de directorios de esta plantilla y proceder a personalizarla agregando tu información en el bloque \emph{INFORMACIÓN DE LA PORTADA} en el archivo \file{memoria.tex}.  
+En la figura \ref{fig:diagrama-bloques-basico} se presenta un diagrama de alto nivel de la solución.
+En primer lugar, los usuarios interactúan con el chatbot a través de una interfaz gráfica, desde la
+cual pueden realizar consultas sobre la información deseada. Estas consultas, procesadas mediante 
+técnicas de lenguaje natural, permiten extraer la información más relevante de la fuente de documentos. 
+Luego, un modelo de inteligencia artificial interpreta las consultas y genera respuestas adecuadas, 
+proporcionando al usuario la información solicitada de manera precisa y contextualizada.
 
-Se puede continuar luego modificando el resto de los archivos siguiendo los lineamientos que se describen en la sección \ref{sec:FillingFile} en la página \pageref{sec:FillingFile}.
-
-Debés asegurarte de leer el capítulo \ref{Chapter2} acerca de las convenciones utilizadas para las Memoria de los Trabajos Finales de la \degreename.
-
-Si sos nuevo en \LaTeX{}, se recomienda que continúes leyendo el documento ya que contiene información básica para aprovechar el potencial de esta herramienta.
-
-
-%----------------------------------------------------------------------------------------
-
-\section{Qué incluye esta plantilla}
-
-\subsection{Carpetas}
-
-Esta plantilla se distribuye como una único archivo .zip que se puede descomprimir en varios archivos y carpetas. Asimismo, se puede consultar el repositorio git para obtener la última versión de los archivos, \url{https://github.com/patriciobos/Plantilla-CESE.git}. Los nombres de las carpetas son, o pretender ser, auto-explicativos.
-
-\keyword{Appendices} -- Esta es la carpeta donde se deben poner los apéndices. Cada apéndice debe ir en su propio archivo \file{.tex}. Se incluye un ejemplo y una plantilla en la carpeta.
-
-\keyword{Chapters} -- Esta es la carpeta donde se deben poner los capítulos de la memoria. Cada capítulo debe ir un su propio archivo \file{.tex} por separado.  Se ofrece por defecto, la siguiente estructura de capítulos y se recomienda su utilización dentro de lo posible:
-
-\begin{itemize}
-\item Capítulo 1: Introducción general	
-\item Capítulo 2: Introducción específica
-\item Capítulo 3: Diseño e implementación
-\item Capítulo 4: Ensayos y resultados
-\item Capítulo 5: Conclusiones
-
-\end{itemize}
-
-Esta estructura de capítulos es la que se recomienda para las memorias de la especialización.
-
-\keyword{Figures} -- Esta carpeta contiene todas las figuras de la memoria.  Estas son las versiones finales de las imágenes que van a ser incluidas en la memoria.  Pueden ser imágenes en formato \textit{raster}\footnote{\url{https://en.wikipedia.org/wiki/Raster_graphics}} como \file{.png}, \file{.jpg} o en formato vectoriales\footnote{\url{https://en.wikipedia.org/wiki/Vector_graphics}} como \file{.pdf}, \file{.ps}.  Se debe notar que utilizar imágenes vectoriales disminuye notablemente el peso del documento final y acelera el tiempo de compilación por lo que es recomendable su utilización siempre que sea posible.
-
-\subsection{Archivos}
-
-También están incluidos varios archivos, la mayoría de ellos son de texto plano y se puede ver su contenido en un editor de texto. Después de la compilación inicial, se verá que más archivos auxiliares son creados por \ LaTeX{} o BibTeX, pero son de uso interno y no es necesario hacer nada en particular con ellos.  Toda la información necesaria para compilar el documento se encuentra en los archivos \file{.tex}, \file{.bib}, \file{.cls} y en las imágenes de la carpeta Figures.
-
-\keyword{referencias.bib} - este es un archivo importante que contiene toda la información de referencias bibliográficas que se utilizarán para las citas en la memoria en conjunto con BibTeX. Usted puede escribir las entradas bibliográficas en forma manual, aunque existen también programas de gestión de referencias que facilitan la creación y gestión de las referencias y permiten exportarlas en formato BibTeX.  También hay disponibles sitios web como \url{books.google.com} que permiten obtener toda la información necesaria para una cita en formato BibTeX. Ver sección \ref{sec:biblio}
-
-\keyword{MastersDoctoralThesis.cls} -- este es un archivo importante. Es el archivos con la clase que le informa a \LaTeX{} cómo debe dar formato a la memoria. El usuario de la plantilla no debería necesitar modificar nada de este archivo.
-
-\keyword{memoria.pdf} -- esta es su memoria con una tipografía bellamente compuesta (en formato de archivo PDF) creado por \LaTeX{}. Se distribuye con la plantilla y después de compilar por primera vez sin hacer ningún cambio se debería obtener una versión idéntica a este documento.
-
-\keyword{memoria.tex} -- este es un archivo importante. Este es el archivo que tiene que compilar \LaTeX{} para producir la memoria como un archivo PDF. Contiene un marco de trabajo y estructuras que le indican a \LaTeX{} cómo diagramar la memoria.  Está altamente comentado para que se pueda entender qué es lo que realiza cada línea de código y por qué está incluida en ese lugar.  En este archivo se debe completar la información personalizada de las primeras sección según se indica en la sección \ref{sec:FillingFile}.
-
-Archivos que \emph{no} forman parte de la distribución de la plantilla pero que son generados por \LaTeX{} como archivos auxiliares necesarios para la producción de la memoria.pdf son:
-
-\keyword{memoria.aux} -- este es un archivo auxiliar generado por \LaTeX{}, si se borra \LaTeX{} simplemente lo regenera cuando se compila el archivo principal \file{memoria.tex}.
-
-\keyword{memoria.bbl} -- este es un archivo auxiliar generado por BibTeX, si se borra BibTeX simplemente lo regenera cuando se compila el archivo principal \file{memoria.tex}. Mientras que el archivo \file{.bib} contiene todas las referencias que hay, este archivo \file{.bbl} contine sólo las referencias que han sido citadas y se utiliza para la construcción de la bibiografía.
-
-\keyword{memoria.blg} -- este es un archivo auxiliar generado por BibTeX, si se borra BibTeX simplemente lo regenera cuando se compila el archivo principal \file{memoria.tex}.
-
-\keyword{memoria.lof} -- este es un archivo auxiliar generado por \LaTeX{}, si se borra \LaTeX{} simplemente lo regenera cuando se compila el archivo principal \file{memoria.tex}.  Le indica a \LaTeX{} cómo construir la sección \emph{Lista de Figuras}.
- 
-\keyword{memoria.log} --  este es un archivo auxiliar generado por \LaTeX{}, si se borra \LaTeX{} simplemente lo regenera cuando se compila el archivo principal \file{memoria.tex}. Contiene mensajes de \LaTeX{}. Si se reciben errores o advertencias durante la compilación, se guardan en este archivo \file{.log}.
-
-\keyword{memoria.lot} -- este es un archivo auxiliar generado por \LaTeX{}, si se borra \LaTeX{} simplemente lo regenera cuando se compila el archivo principal \file{memoria.tex}.  Le indica a \LaTeX{} cómo construir la sección \emph{Lista de Tablas}.
-
-\keyword{memoria.out} -- este es un archivo auxiliar generado por \LaTeX{}, si se borra \LaTeX{} simplemente lo regenera cuando se compila el archivo principal \file{memoria.tex}.
-
-De esta larga lista de archivos, sólo aquellos con la extensión \file{.bib}, \file{.cls} y \file{.tex} son importantes.  Los otros archivos auxiliares pueden ser ignorados o borrados ya que \LaTeX{} y BibTeX los regenerarán durante la compilación.
-
-%----------------------------------------------------------------------------------------
-
-\section{Entorno de trabajo}
-
-Ante de comenzar a editar la plantilla debemos tener un editor \LaTeX{} instalado en nuestra computadora.  En forma análoga a lo que sucede en lenguaje C, que se puede crear y editar código con casi cualquier editor, existen ciertos entornos de trabajo que nos pueden simplificar mucho la tarea.  En este sentido, se recomienda, sobre todo para los principiantes en \LaTeX{} la utilización de TexMaker, un programa gratuito y multi-plantaforma que está disponible tanto para windows como para sistemas GNU/linux.
-
-La versión más reciente de TexMaker es la 4.5 y se puede descargar del siguiente link: \url{http://www.xm1math.net/texmaker/download.html}. Se puede consultar el manual de usuario en el siguiente link: \url{http://www.xm1math.net/texmaker/doc.html}.
- 
-
-\subsection{Paquetes adicionales}
-
-Si bien durante el proceso de instalación de TexMaker, o cualquier otro editor que se haya elegido, se instalarán en el sistema los paquetes básicos necesarios para trabajar con \LaTeX{}, la plantilla de los trabajos de Especialización y Maestría requieren de paquete adicionales.
-
-Se indican a continuación los comandos que se deben introducir en la consola de Ubuntu (ctrl + alt + t) para instalarlos:
-
-\begin{lstlisting}[language=bash]
-  $ sudo apt install texlive-lang-spanish texlive-science 
-  $ sudo apt install texlive-bibtex-extra biber
-  $ sudo apt install texlive texlive-fonts-recommended
-  $ sudo apt install texlive-latex-extra
-\end{lstlisting}
-
-
-\subsection{Configurando TexMaker}
-\label{subsec:configurando}
-
-
-
-Una vez instalado el programa y los paquetes adicionales se debe abrir el archivo memoria.tex con el editor para ver una pantalla similar a la que se puede apreciar en la figura \ref{fig:texmaker}. 
-Una vez instalado el programa y los paquetes adicionales se debe abrir el archivo memoria.tex con el editor para ver una pantalla similar a la que se puede apreciar en la figura \ref{fig:texmaker}. 
-Una vez instalado el programa y los paquetes adicionales se debe abrir el archivo memoria.tex con el editor para ver una pantalla similar a la que se puede apreciar en la figura \ref{fig:texmaker}. 
-Una vez instalado el programa y los paquetes adicionales se debe abrir el archivo memoria.tex con el editor para ver una pantalla similar a la que se puede apreciar en la figura \ref{fig:texmaker}. 
-
-\vspace{1cm}
-
-\begin{figure}[htbp]
+\begin{figure}[ht]
 	\centering
-	\includegraphics[width=.5\textwidth]{./Figures/texmaker.png}
-	\caption{Entorno de trabajo de texMaker.}
-	\label{fig:texmaker}
+	\includegraphics[scale=.3]{./Figures/diagrama_bloques_basico.png}
+	\caption{Diagrama de alto nivel de la solución.}
+	\label{fig:diagrama-bloques-basico}
 \end{figure}
 
-\vspace{1cm}
+%----------------------------------------------------------------------------------------
+\section{Estado del arte}
 
-Notar que existe una vista llamada Estructura a la izquierda de la interfaz que nos permite abrir desde dentro del programa los archivos individuales de los capítulos.  A la derecha se encuentra una vista con el archivo propiamente dicho para su edición. Hacia la parte inferior se encuentra una vista del log con información de los resultados de la compilación.  En esta última vista pueden aparecen advertencias o \textit{warning}, que normalmente pueden ser ignorados, y los errores que se indican en color rojo y deben resolverse para que se genere el PDF de salida.
+El desarrollo de chatbots y sistemas de recuperación de información ha avanzado considerablemente en los últimos años, 
+impulsado por mejoras en el procesamiento de lenguaje natural (PLN) y el acceso a grandes volúmenes de datos. 
+En este contexto, los chatbots especializados han surgido como soluciones destacadas para el acceso eficiente 
+a información específica en distintos entornos, incluyendo el empresarial. A continuación, se presenta una revisión 
+de las principales tecnologías y enfoques actuales que sustentan el desarrollo del presente trabajo.
 
-Recordar que el archivo que se debe compilar con PDFLaTeX es \file{memoria.tex}, si se tratara de compilar alguno de los capítulos saldría un error.  Para salvar la molestia de tener que cambiar de archivo para compilar cada vez que se realice una modificación en un capítulo, se puede definir el archivo \file{memoria.tex} como ``documento maestro'' yendo al menú opciones -> ``definir documento actual como documento maestro'', lo que permite compilar con PDFLaTeX memoria.tex directamente desde cualquier archivo que se esté modificando . Se muestra esta opción en la figura \ref{fig:docMaestro}.
+Los chatbots modernos han evolucionado desde sistemas de reglas simples hasta modelos sofisticados capaces de 
+mantener conversaciones complejas. Entre los primeros desarrollos de chatbots, como ELIZA \citep{paper:eliza} en 
+la década de 1960, se empleaban reglas predefinidas que limitaban la interacción a una cantidad pequeña de 
+respuestas posibles. Sin embargo, el uso de redes neuronales y el aprendizaje profundo en las últimas décadas 
+ha transformado el campo de los chatbots, permitiendo la aparición de sistemas como Siri de Apple, Alexa de Amazon 
+y Google Assistant \citep{article:voice-assistants}. Estos asistentes virtuales han popularizado el uso de interfaces 
+de conversación en la vida cotidiana, siendo capaces de responder a preguntas comunes, realizar tareas administrativas 
+y ofrecer asistencia en tiempo real.
 
-\begin{figure}[h]
+Una tendencia reciente en el desarrollo de chatbots es la aplicación de modelos generativos de lenguaje, como GPT-3 y GPT-4 
+de OpenAI \citep{paper:gpt}, BERT de Google \citep{paper:bert}, y LLAMA de Meta \citep{paper:llama}. Estos modelos, basados 
+en arquitecturas de \textit{transformers} \citep{paper:transformers}, permiten una comprensión profunda del contexto y del 
+significado en secuencias de palabras. Su capacidad de generar respuestas coherentes y bien estructuradas ha llevado al 
+desarrollo de los tan populares chatbots modernos como ChatGPT \citep{website:chatgpt}, Microsoft Copilot \citep{website:copilot}
+o Google Gemini \citep{website:gemini}, cuyas interfaces se observan en la figura \ref{fig:chatbots}.
+
+\begin{figure}[ht]
 	\centering
-	\includegraphics[width=\textwidth]{./Figures/docMaestro.png}
-	\caption{Definir memoria.tex como documento maestro.}
-	\label{fig:docMaestro}
+	\includegraphics[scale=.38]{./Figures/chatbots.png}
+	\caption{ChatGPT, Gemini y Copilot, los chatbots más populares actualmente.}
+	\label{fig:chatbots}
 \end{figure}
 
-En el menú herramientas se encuentran las opciones de compilación.  Para producir un archivo PDF a partir de un archivo .tex se debe ejecutar PDFLaTeX (el shortcut es F6). Para incorporar nueva bibliografía se debe utilizar la opción BibTeX del mismo menú herramientas (el shortcut es F11).
+\vspace{15mm}
 
-Notar que para actualizar las tablas de contenidos se debe ejecutar PDFLaTeX dos veces.  Esto se debe a que es necesario actualizar algunos archivos auxiliares antes de obtener el resultado final.  En forma similar, para actualizar las referencias bibliográficas se debe ejecutar primero PDFLaTeX, después BibTeX y finalmente PDFLaTeX dos veces por idénticos motivos.
+Si bien los modelos generativos han alcanzado un alto grado de sofisticación, presentan algunas limitaciones importantes. 
+En primer lugar, su conocimiento es en gran medida de propósito general, dado que han sido entrenados con grandes volúmenes 
+de datos públicos y no específicos, lo cual limita su precisión cuando se requiere información particular de una organización. 
+En segundo lugar, estos modelos tienden a ``inventar'' respuestas cuando no encuentran información relevante, fenómeno conocido 
+como \textit{hallucinations} \citep{article:hallucinations}. En un contexto empresarial, esto puede provocar confusión o incluso 
+proporcionar información errónea.
 
-\section{Personalizando la plantilla, el archivo \file{memoria.tex}}
-\label{sec:FillingFile}
+En la búsqueda de soluciones que combinen la capacidad de los modelos generativos con la precisión de la información propietaria, 
+ha surgido el enfoque de generación aumentada por recuperación (RAG, por sus siglas en inglés). Este enfoque combina sistemas de 
+recuperación de información con modelos de generación de texto, lo que permite que las respuestas no solo se basen en la capacidad 
+generativa del modelo, sino también en una búsqueda previa en bases de datos o documentos específicos \citep{paper:rag-1} 
+\citep{paper:rag-2}.
 
-Para personalizar la plantilla se debe incorporar la información propia en los distintos archivos \file{.tex}. 
-
-Primero abrir \file{memoria.tex} con TexMaker (o el editor de su preferencia). Se debe ubicar dentro del archivo el bloque de código titulado \emph{INFORMACIÓN DE LA PORTADA} donde se deben incorporar los primeros datos personales con los que se construirá automáticamente la portada.
-
+El presente trabajo se apoya en el estado del arte de los modelos de lenguaje y la técnica de RAG para crear una solución innovadora 
+que mejora la productividad al centralizar y optimizar el acceso a la información relevante en el entorno laboral.
 
 %----------------------------------------------------------------------------------------
+\section{Motivación y alcance}
 
-\section{El código del archivo \file{memoria.tex} explicado}
+El propósito de este trabajo fue optimizar el proceso de búsqueda de información por parte de los empleados. Se buscó
+proporcionar una herramienta eficaz que permita acceder rápidamente a los datos relevantes, que mejore la eficiencia y 
+productividad en el entorno laboral.
 
-El archivo \file{memoria.tex} contiene la estructura del documento y es el archivo de mayor jerarquía de la memoria.  Podría ser equiparable a la función \emph{main()} de un programa en C, o mejor dicho al archivo fuente .c donde se encuentra definida la función main().
-
-La estructura básica de cualquier documento de \LaTeX{} comienza con la definición de clase del documento, es seguida por un preámbulo donde se pueden agregar funcionalidades con el uso de \texttt{paquetes} (equiparables a bibliotecas de C), y finalmente, termina con el cuerpo del documento, donde irá el contenido de la memoria.
-
-\lstset{%
-  basicstyle=\small\ttfamily,
-  language=[LaTeX]{TeX}
-}
-
-\begin{lstlisting}
-\documentclass{article}  <- Definicion de clase
-\usepackage{listings}	 <- Preambulo
-
-\begin{document}	 <- Comienzo del contenido propio 
-	Hello world!
-\end{document}
-\end{lstlisting}
-
-
-El archivo \file{memoria.tex} se encuentra densamente comentado para explicar qué páginas, secciones y elementos de formato está creando el código \LaTeX{} en cada línea. El código está dividido en bloques con nombres en mayúsculas para que resulte evidente qué es lo que hace esa porción de código en particular. Inicialmente puede parecer que hay mucho código \LaTeX{}, pero es principalmente código para dar formato a la memoria por lo que no requiere intervención del usuario de la plantilla.  Sí se deben personalizar con su información los bloques indicados como:
+Para ello, se realizaron las siguientes tareas:
 
 \begin{itemize}
-	\item Informacion de la memoria
-	\item Resumen
-	\item Agradecimientos
-	\item Dedicatoria
+	\item Procesamiento de los documentos y posterior almacenamiento en una base de datos.
+	\item Integración con un modelo lingüístico grande (LLM) que pueda entender las consultas de los usuarios y proporcionar respuestas precisas basadas en el contenido de los documentos ingestados.
+	\item Diseño e implementación de una interfaz de usuario intuitiva y fácil de utilizar que permita a los empleados interactuar con el chatbot de manera eficiente.
+	\item Desarrollo de un \textit{pipeline} de despliegue continuo que facilite la ingesta de nuevos documentos y el despliegue de la aplicación.
+  \item Evaluación del rendimiento del chatbot mediante pruebas exhaustivas con diferentes tipos de consultas.
 \end{itemize}
 
-El índice de contenidos, las listas de figura de tablas se generan en forma automática y no requieren intervención ni edición manual por parte del usuario de la plantilla. 
+Las siguientes actividades no formaron parte del alcance:
 
-En la parte final del documento se encuentran los capítulos y los apéndices.  Por defecto se incluyen los 5 capítulos propuestos que se encuentran en la carpeta /Chapters. Cada capítulo se debe escribir en un archivo .tex separado y se debe poner en la carpeta \emph{Chapters} con el nombre \file{Chapter1}, \file{Chapter2}, etc\ldots El código para incluir capítulos desde archivos externos se muestra a continuación.
+\begin{itemize}
+	\item Despliegue del chatbot en un ambiente productivo.
+	\item Entrenamiento continuo del chatbot en base a las consultas realizadas por los usuarios.
+	\item Desarrollo de funcionalidades avanzadas de seguridad, como por ejemplo autenticación de usuarios o cifrado de datos.
+\end{itemize}
 
-\begin{verbatim}
-	\include{Chapters/Chapter1}
-	\include{Chapters/Chapter2} 
-	\include{Chapters/Chapter3}
-	\include{Chapters/Chapter4} 
-	\include{Chapters/Chapter5} 
-\end{verbatim}
-
-Los apéndices también deben escribirse en archivos .tex separados, que se deben ubicar dentro de la carpeta \emph{Appendices}. Los apéndices vienen comentados por defecto con el caracter \code{\%} y para incluirlos simplemente se debe eliminar dicho caracter.
-
-Finalmente, se encuentra el código para incluir la bibliografía en el documento final.  Este código tampoco debe modificarse. La metodología para trabajar las referencias bibliográficas se desarrolla en la sección \ref{sec:biblio}.
 %----------------------------------------------------------------------------------------
+\section{Requerimientos}
 
-\section{Bibliografía}
-\label{sec:biblio}
-
-Las opciones de formato de la bibliografía se controlan a través del paquete de latex \option{biblatex} que se incluye en la memoria en el archivo memoria.tex.  Estas opciones determinan cómo se generan las citas bibliográficas en el cuerpo del documento y cómo se genera la bibliografía al final de la memoria.
-
-En el preámbulo se puede encontrar el código que incluye el paquete biblatex, que no requiere ninguna modificación del usuario de la plantilla, y que contiene las siguientes opciones:
-
-\begin{lstlisting}
-\usepackage[backend=bibtex,
-	natbib=true, 
-	style=numeric, 
-	sorting=none]
-{biblatex}
-\end{lstlisting}
-
-En el archivo \file{reference.bib} se encuentran las referencias bibliográficas que se pueden citar en el documento.  Para incorporar una nueva cita al documento lo primero es agregarla en este archivo con todos los campos necesario.  Todas las entradas bibliográficas comienzan con $@$ y una palabra que define el formato de la entrada.  Para cada formato existen campos obligatorios que deben completarse. No importa el orden en que las entradas estén definidas en el archivo .bib.  Tampoco es importante el orden en que estén definidos los campos de una entrada bibliográfica. A continuación se muestran algunos ejemplos:
-
-\begin{lstlisting}
-@ARTICLE{ARTICLE:1,
-    AUTHOR="John Doe",
-    TITLE="Title",
-    JOURNAL="Journal",
-    YEAR="2017",
-}
-\end{lstlisting}
-
-
-\begin{lstlisting}
-@BOOK{BOOK:1,
-    AUTHOR="John Doe",
-    TITLE="The Book without Title",
-    PUBLISHER="Dummy Publisher",
-    YEAR="2100",
-}
-\end{lstlisting}
-
-
-\begin{lstlisting}
-@INBOOK{BOOK:2,
-    AUTHOR="John Doe",
-    TITLE="The Book without Title",
-    PUBLISHER="Dummy Publisher",
-    YEAR="2100",
-    PAGES="100-200",
-}
-\end{lstlisting}
-
-
-\begin{lstlisting}
-@MISC{WEBSITE:1,
-    HOWPUBLISHED = "\url{http://example.com}",
-    AUTHOR = "Intel",
-    TITLE = "Example Website",
-    MONTH = "12",
-    YEAR = "1988",
-    URLDATE = {2012-11-26}
-}
-\end{lstlisting}
-
-Se debe notar que los nombres \emph{ARTICLE:1}, \emph{BOOK:1}, \emph{BOOK:2} y \emph{WEBSITE:1} son nombres de fantasía que le sirve al autor del documento para identificar la entrada. En este sentido, se podrían reemplazar por cualquier otro nombre.  Tampoco es necesario poner : seguido de un número, en los ejemplos sólo se incluye como un posible estilo para identificar las entradas.
-
-La entradas se citan en el documento con el comando: 
-
-\begin{verbatim}
-\citep{nombre_de_la_entrada}
-\end{verbatim}
-
-Y cuando se usan, se muestran así: \citep{ARTICLE:1}, \citep{BOOK:1}, \citep{BOOK:2}, \citep{WEBSITE:1}.  Notar cómo se conforma la sección Bibliografía al final del documento.
-
-Finalmente y como se mencionó en la subsección \ref{subsec:configurando}, para actualizar las referencias bibliográficas tanto en la sección bibliografía como las citas en el cuerpo del documento, se deben ejecutar las herramientas de compilación PDFLaTeX, BibTeX, PDFLaTeX, PDFLaTeX, en ese orden.  Este procedimiento debería resolver cualquier mensaje "Citation xxxxx on page x undefined".
+A continuación se describen los principales requerimientos establecidos para cumplir
+con el alcance propuesto:

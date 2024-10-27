@@ -40,53 +40,26 @@
 
 
 %----------------------------------------------------------------------------------------
-%	SECTION 1
-%----------------------------------------------------------------------------------------
-\section{Análisis del software}
+
+Todos los capítulos deben comenzar con un breve párrafo introductorio que indique cuál es el contenido que se encontrará al leerlo.  La redacción sobre el contenido de la memoria debe hacerse en presente y todo lo referido al proyecto en pasado, siempre de modo impersonal.
+
+%---------------------------------------------------------------------------------------
+\section{Arquitectura del sistema}
  
-La idea de esta sección es resaltar los problemas encontrados, los criterios utilizados y la justificación de las decisiones que se hayan tomado.
+%---------------------------------------------------------------------------------------
+\section{Configuración de la infraestructura en la nube}
 
-Se puede agregar código o pseudocódigo dentro de un entorno lstlisting con el siguiente código:
+%---------------------------------------------------------------------------------------
+\section{Procesamiento de los documentos}
 
-\begin{verbatim}
-\begin{lstlisting}[caption= "un epígrafe descriptivo"]
-	las líneas de código irían aquí...
-\end{lstlisting}
-\end{verbatim}
+%---------------------------------------------------------------------------------------
+\section{Lógica de comunicación entre el usuario y el modelo}
 
-A modo de ejemplo:
+%---------------------------------------------------------------------------------------
+\section{API}
 
-\begin{lstlisting}[label=cod:vControl,caption=Pseudocódigo del lazo principal de control.]  % Start your code-block
+%---------------------------------------------------------------------------------------
+\section{Interfaz de usuario}
 
-#define MAX_SENSOR_NUMBER 3
-#define MAX_ALARM_NUMBER  6
-#define MAX_ACTUATOR_NUMBER 6
-
-uint32_t sensorValue[MAX_SENSOR_NUMBER];		
-FunctionalState alarmControl[MAX_ALARM_NUMBER];	//ENABLE or DISABLE
-state_t alarmState[MAX_ALARM_NUMBER];						//ON or OFF
-state_t actuatorState[MAX_ACTUATOR_NUMBER];			//ON or OFF
-
-void vControl() {
-
-	initGlobalVariables();
-	
-	period = 500 ms;
-		
-	while(1) {
-
-		ticks = xTaskGetTickCount();
-		
-		updateSensors();
-		
-		updateAlarms();
-		
-		controlActuators();
-		
-		vTaskDelayUntil(&ticks, period);
-	}
-}
-\end{lstlisting}
-
-
-
+%---------------------------------------------------------------------------------------
+\section{Pipelines de despliegue automático}
