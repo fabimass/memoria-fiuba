@@ -42,19 +42,19 @@ en sí, lo que afecta tanto la productividad como la efectividad en la toma de d
 
 Un chatbot especializado ofrece una solución prometedora al permitir a los usuarios realizar 
 consultas en lenguaje natural y obtener respuestas de manera instantánea. Mientras que otros sistemas 
-de inteligencia artificial ampliamente conocidos y utilizados, como ChatGPT o Microsoft Copilot, 
+de inteligencia artificial ampliamente conocidos y utilizados 
 destacan en su capacidad para generar respuestas generales basadas en un amplio conocimiento del 
 lenguaje, el presente trabajo se distingue por su capacidad para trabajar con documentos altamente 
 específicos (y potencialmente privados). Esto le permite ofrecer respuestas adaptadas al contexto 
 interno de la organización, las cuales no podrían obtenerse mediante el uso de los chatbots de 
-propósito general disponibles en el mercado.
+propósito general disponibles en el mercado \citep{website:chatgpt} \citep{website:copilot} \citep{website:gemini}.
 
 En la figura \ref{fig:diagrama-bloques-basico} se presenta un diagrama de alto nivel de la solución.
-En primer lugar, los usuarios interactúan con el chatbot a través de una interfaz gráfica, desde la
+En primer lugar, los usuarios interactúan con el chatbot a través de una interfaz gráfica desde la
 cual pueden realizar consultas sobre la información deseada. Estas consultas, procesadas mediante 
 técnicas de lenguaje natural, permiten extraer la información más relevante de la fuente de documentos. 
-Luego, un modelo de inteligencia artificial interpreta las consultas y genera respuestas adecuadas, 
-proporcionando al usuario la información solicitada de manera precisa y contextualizada.
+Luego, un modelo de inteligencia artificial interpreta las consultas y genera respuestas que proporcionan 
+al usuario la información solicitada de manera precisa y contextualizada.
 
 \begin{figure}[ht]
 	\centering
@@ -62,6 +62,8 @@ proporcionando al usuario la información solicitada de manera precisa y context
 	\caption{Diagrama de alto nivel de la solución.}
 	\label{fig:diagrama-bloques-basico}
 \end{figure}
+
+\vspace{15mm}
 
 %----------------------------------------------------------------------------------------
 \section{Estado del arte}
@@ -73,12 +75,12 @@ a información específica en distintos entornos, incluyendo el empresarial. A c
 de las principales tecnologías y enfoques actuales que sustentan el desarrollo del presente trabajo.
 
 Los chatbots modernos han evolucionado desde sistemas de reglas simples hasta modelos sofisticados capaces de 
-mantener conversaciones complejas. Entre los primeros desarrollos de chatbots, como ELIZA \citep{paper:eliza} en 
+mantener conversaciones complejas. Entre los primeros desarrollos, como ELIZA \citep{paper:eliza} en 
 la década de 1960, se empleaban reglas predefinidas que limitaban la interacción a una cantidad pequeña de 
 respuestas posibles. Sin embargo, el uso de redes neuronales y el aprendizaje profundo en las últimas décadas 
-ha transformado el campo de los chatbots, permitiendo la aparición de sistemas como Siri de Apple, Alexa de Amazon 
+han revolucionado el campo, permitiendo la aparición de sistemas como Siri de Apple, Alexa de Amazon 
 y Google Assistant \citep{article:voice-assistants}. Estos asistentes virtuales han popularizado el uso de interfaces 
-de conversación en la vida cotidiana, siendo capaces de responder a preguntas comunes, realizar tareas administrativas 
+de conversación en la vida cotidiana, ya que son capaces de responder a preguntas comunes, realizar tareas administrativas 
 y ofrecer asistencia en tiempo real.
 
 Una tendencia reciente en el desarrollo de chatbots es la aplicación de modelos generativos de lenguaje, como GPT-3 y GPT-4 
@@ -88,6 +90,8 @@ significado en secuencias de palabras. Su capacidad de generar respuestas cohere
 desarrollo de los tan populares chatbots modernos como ChatGPT \citep{website:chatgpt}, Microsoft Copilot \citep{website:copilot}
 o Google Gemini \citep{website:gemini}, cuyas interfaces se observan en la figura \ref{fig:chatbots}.
 
+\vspace{25mm}
+
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=.38]{./Figures/chatbots.png}
@@ -95,7 +99,7 @@ o Google Gemini \citep{website:gemini}, cuyas interfaces se observan en la figur
 	\label{fig:chatbots}
 \end{figure}
 
-\vspace{15mm}
+\vspace{10mm}
 
 Si bien los modelos generativos han alcanzado un alto grado de sofisticación, presentan algunas limitaciones importantes. 
 En primer lugar, su conocimiento es en gran medida de propósito general, dado que han sido entrenados con grandes volúmenes 
@@ -112,6 +116,8 @@ generativa del modelo, sino también en una búsqueda previa en bases de datos o
 
 El presente trabajo se apoya en el estado del arte de los modelos de lenguaje y la técnica de RAG para crear una solución innovadora 
 que mejora la productividad al centralizar y optimizar el acceso a la información relevante en el entorno laboral.
+
+\vspace{10mm}
 
 %----------------------------------------------------------------------------------------
 \section{Motivación y alcance}
@@ -130,6 +136,8 @@ Para ello, se realizaron las siguientes tareas:
   \item Evaluación del rendimiento del chatbot mediante pruebas exhaustivas con diferentes tipos de consultas.
 \end{itemize}
 
+\vspace{5mm}
+
 Las siguientes actividades no formaron parte del alcance:
 
 \begin{itemize}
@@ -138,8 +146,38 @@ Las siguientes actividades no formaron parte del alcance:
 	\item Desarrollo de funcionalidades avanzadas de seguridad, tales como autenticación de usuarios o cifrado de datos.
 \end{itemize}
 
+\vspace{10mm}
+
 %----------------------------------------------------------------------------------------
 \section{Requerimientos}
 
-A continuación se describen los principales requerimientos establecidos para cumplir
-con el alcance propuesto:
+A continuación se describen los principales requerimientos establecidos durante la etapa de planificación:
+
+\begin{enumerate}
+	\item Requerimientos funcionales:
+		\begin{enumerate}
+			\item El sistema debe permitir a los usuarios consultar por información a través de una interfaz gráfica.
+			\item El sistema debe ser capaz de entender consultas escritas en lenguaje natural.
+			\item El sistema debe proporcionar respuestas precisas basadas en el contenido de los documentos procesados.
+		\end{enumerate}
+	\item Requerimientos de la interfaz:
+		\begin{enumerate}
+	  		\item La interfaz gráfica debe ser intuitiva y fácil de usar para los usuarios.
+	  		\item Se debe proporcionar retroalimentación instantánea al usuario luego de realizar una consulta.
+	  	\end{enumerate}
+	\item Requerimiento de testing:
+	  	\begin{enumerate}
+	  		\item Se deben realizar pruebas exhaustivas para garantizar la precisión y la robustez del sistema.
+	  	\end{enumerate}
+	\vspace{10mm}
+	\item Requerimientos de documentación:
+		\begin{enumerate}
+			\item Se deben documentar las pruebas realizadas y los resultados obtenidos.
+			\item Se debe elaborar un informe de avance del proyecto.
+			\item Se debe confeccionar una memoria técnica del proyecto.
+		\end{enumerate}
+	\item Requerimientos de cumplimiento normativo:
+		\begin{enumerate}
+			\item El sistema debe cumplir con las regulaciones de privacidad de datos vigentes.
+		\end{enumerate}
+\end{enumerate}
