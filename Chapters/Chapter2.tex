@@ -46,6 +46,17 @@ cuya evaluación y selección se detalla en el capítulo \ref{Chapter4}.
 
 \subsection{Transformers}
 
+La arquitectura de \textit{transformers} ha revolucionado el procesamiento de lenguaje natural al introducir un mecanismo de \textit{self-attention}, 
+que permite a un modelo evaluar la relevancia de cada palabra en una secuencia en relación con las demás \citep{paper:transformers}. Este enfoque 
+supera las limitaciones de modelos secuenciales tradicionales, ya que permite procesar palabras en paralelo y captar dependencias de largo alcance 
+en el texto. En lugar de analizar cada palabra en un orden específico, el mecanismo de \textit{self-attention} permite que el modelo ``preste atención'' 
+a las palabras más relevantes en el contexto de la frase, asignando pesos a cada palabra según su importancia relativa en la oración.
+
+Gracias a esta capacidad, los \textit{transformers} pueden capturar relaciones contextuales complejas y matices semánticos entre las palabras, 
+lo que resulta fundamental para tareas como la generación de texto. Esta arquitectura ha hecho posible que los modelos comprendan y generen 
+lenguaje natural de una forma mucho más cercana a la comprensión humana, permitiendo respuestas precisas y contextualmente adecuadas. Esta técnica 
+ha sido fundamental en el desarrollo de los modelos grandes de lenguaje, los cuales se presentan en la siguiente sección.
+
 %----------------------------------------------------------------------------------------
 \section{Modelos grandes de lenguaje}
 
