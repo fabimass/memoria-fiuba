@@ -4,10 +4,47 @@
 
 %----------------------------------------------------------------------------------------
 
-Todos los capítulos deben comenzar con un breve párrafo introductorio que indique cuál es el contenido que se encontrará al leerlo.  La redacción sobre el contenido de la memoria debe hacerse en presente y todo lo referido al proyecto en pasado, siempre de modo impersonal.
+Este capítulo tiene como objetivo presentar las técnicas y herramientas clave utilizadas en el 
+desarrollo de este trabajo. Se analizan los enfoques fundamentales para el procesamiento de 
+lenguaje natural, junto con los modelos, frameworks e infraestructura necesarios para 
+construir un sistema de recuperación de información eficiente y escalable. Este recorrido 
+técnico permite comprender los fundamentos sobre los que se apoya la solución implementada. 
 
 %---------------------------------------------------------------------------------------
 \section{Técnicas de procesamiento de lenguaje natural}
+
+El procesamiento de lenguaje natural (NLP) es un área de la inteligencia artificial que permite 
+a las máquinas comprender e interpretar el lenguaje humano \citep{book:nlp}. Esto juega un papel esencial 
+para que el chatbot interprete las consultas de los usuarios y localice la información relevante en los 
+documentos procesados. Las técnicas de NLP aplicadas permiten que el sistema entienda el 
+significado de las consultas, independientemente de variaciones lingüísticas o de sintaxis. Entre los 
+métodos de mayor importancia para este trabajo se encuentran los \textit{word embeddings} y
+\textit{transformers}.
+
+\subsection{Word embeddings}
+
+Los \textit{embeddings} son una poderosa técnica para transformar datos complejos en formas numéricas que 
+pueden ser fácilmente procesadas y analizadas por algoritmos de aprendizaje automático. Esta técnica permite 
+representar virtualmente cualquier tipo de dato como vectores, lo que posibilita su manipulación en tareas de 
+procesamiento de lenguaje natural.
+
+Sin embargo, no se trata solo de convertir las palabras en vectores. Es crucial preservar el significado original 
+de los datos para que las tareas realizadas en este espacio transformado mantengan la coherencia semántica. 
+Por ejemplo, al comparar dos frases, no queremos simplemente comparar las palabras que contienen, sino evaluar 
+si ambas expresan un significado similar.
+
+Para conservar el significado, es necesario generar vectores donde las relaciones entre ellos sean representativas 
+del contenido. Para ello, se emplea un modelo de \textit{embeddings} pre-entrenado, que produce una representación compacta 
+de los datos mientras mantiene sus características semánticas. El objetivo es capturar el significado o las relaciones 
+semánticas entre los puntos de datos, de modo que los elementos similares se encuentren cercanos en el espacio vectorial y los disímiles estén alejados. 
+Por ejemplo, consideremos las palabras ``rey'' y ``reina''. Un \textit{embedding} puede mapear estas palabras en vectores de modo 
+que la diferencia entre ``rey' y ``reina'' sea similar a la diferencia entre ``hombre'' y ``mujer'', reflejando así las 
+relaciones semánticas subyacentes.
+
+En este trabajo, se ensayaron diferentes modelos de \textit{embeddings} de OpenAI, Google y Hugging Face, 
+cuya evaluación y selección se detalla en el capítulo \ref{Chapter4}.
+
+\subsection{Transformers}
 
 %----------------------------------------------------------------------------------------
 \section{Modelos grandes de lenguaje}
