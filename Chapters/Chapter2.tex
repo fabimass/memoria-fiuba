@@ -60,6 +60,39 @@ ha sido fundamental en el desarrollo de los modelos grandes de lenguaje, los cua
 %----------------------------------------------------------------------------------------
 \section{Modelos grandes de lenguaje}
 
+Los modelos grandes de lenguaje (LLM, por sus siglas en inglés) son redes neuronales de gran escala, entrenadas 
+para comprender y generar texto en lenguaje natural. Estos modelos, basados en arquitecturas de \textit{transformers}, 
+están compuestos por millones o incluso billones de parámetros, lo que les permite capturar patrones complejos y 
+relaciones contextuales en vastos conjuntos de datos de texto. Los LLM son capaces de realizar múltiples 
+tareas de procesamiento de lenguaje natural, como la generación de texto, la traducción 
+automática y el resumen de documentos. En la tabla \ref{tab:llms} se presentan 
+algunos de los modelos más relevantes en la actualidad.
+
+\begin{table}[h]
+	\centering
+	\caption[Modelos LLM disponibles en el mercado]{Modelos LLM disponibles en el mercado}
+	\begin{tabular}{l c c c}    
+		\toprule
+		\textbf{Modelo} 	 & \textbf{Creador} 	& \textbf{Año de publicación}  & \textbf{Cant. de parámetros (aprox.)}\\
+		\midrule
+		GPT-4o               & OpenAI 				& 2024                         & No divulgado\\		
+		Gemini 1.5      	 & Google				& 2024                         & No divulgado\\
+		LLaMa 3         	 & Meta				    & 2024                         & 70 mil millones\\
+        GPT-4         	     & OpenAI				& 2023                         & 1 billón\\
+        LLaMa 2         	 & Meta				    & 2023                         & 13 mil millones\\
+        Mistral-7B         	 & Mistral AI		    & 2023                         & 7 mil millones\\
+        BLOOM         	     & BigScience		    & 2022                         & 176 mil millones\\
+        GPT-3.5         	 & OpenAI				& 2022                         & 175 mil millones\\
+		\bottomrule
+		\hline
+	\end{tabular}
+	\label{tab:llms}
+\end{table}
+
+En este trabajo, el modelo LLM desempeña un papel central ya que es el encargado de entender las consultas de 
+los usuarios y generar respuestas coherentes. Para seleccionar el modelo más adecuado, 
+se ensayaron diferentes variantes, cuyos detalles se describen en el capítulo \ref{Chapter4}.
+
 %----------------------------------------------------------------------------------------
 \section{Generación aumentada por recuperación}
 
