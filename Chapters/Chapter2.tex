@@ -66,7 +66,7 @@ están compuestos por millones o incluso billones de parámetros, lo que les per
 relaciones contextuales en vastos conjuntos de datos de texto. Los LLM son capaces de realizar múltiples 
 tareas de procesamiento de lenguaje natural, como la generación de texto, la traducción 
 automática y el resumen de documentos. En la tabla \ref{tab:llms} se presentan 
-algunos de los modelos más relevantes en la actualidad.
+algunos de los modelos más relevantes en la actualidad \citep{website:lifearchitect}.
 
 \begin{table}[h]
 	\centering
@@ -75,14 +75,14 @@ algunos de los modelos más relevantes en la actualidad.
 		\toprule
 		\textbf{Modelo} 	 & \textbf{Creador} 	& \textbf{Año de publicación}  & \textbf{Cant. de parámetros (aprox.)}\\
 		\midrule
-		GPT-4o               & OpenAI 				& 2024                         & No divulgado\\		
-		Gemini 1.5      	 & Google				& 2024                         & No divulgado\\
+		GPT-4o               & OpenAI 				& 2024                         & 200 mil millones\\		
+		Gemini 1.5      	 & Google				& 2024                         & 1.5 billones\\
 		LLaMa 3         	 & Meta				    & 2024                         & 70 mil millones\\
-        GPT-4         	     & OpenAI				& 2023                         & 1 billón\\
-        LLaMa 2         	 & Meta				    & 2023                         & 13 mil millones\\
+        GPT-4         	     & OpenAI				& 2023                         & 1.76 billones\\
+        LLaMa 2         	 & Meta				    & 2023                         & 70 mil millones\\
         Mistral-7B         	 & Mistral AI		    & 2023                         & 7 mil millones\\
         BLOOM         	     & BigScience		    & 2022                         & 176 mil millones\\
-        GPT-3.5         	 & OpenAI				& 2022                         & 175 mil millones\\
+        GPT-3.5         	 & OpenAI				& 2022                         & 20 mil millones\\
 		\bottomrule
 		\hline
 	\end{tabular}
@@ -93,11 +93,87 @@ En este trabajo, el modelo LLM desempeña un papel central ya que es el encargad
 los usuarios y generar respuestas coherentes. Para seleccionar el modelo más adecuado, 
 se ensayaron diferentes variantes, cuyos detalles se describen en el capítulo \ref{Chapter4}.
 
+\vspace{5mm}
+
+\subsection{Modelos LLM versus modelos tradicionales}
+
+A continuación se mencionan las principales diferencias entre los modelos grandes de lenguaje y los
+modelos tradicionales:
+
+\begin{itemize}
+	\item Los LLM pueden adaptarse a nuevas tareas simplemente utilizando ejemplos en el \textit{prompt}, 
+	sin necesidad de modificar sus parámetros o realizar reentrenamiento. Esto contrasta con los modelos tradicionales, 
+	que requieren grandes conjuntos de datos etiquetados y reentrenamiento cada vez que se incorporan nuevas tareas.
+	\item Los LLM comprenden instrucciones en lenguaje natural, lo que les permite seguir instrucciones complejas e 
+	incluso inferir reglas implícitas a partir de ejemplos. Los modelos tradicionales, en cambio, suelen necesitar 
+	formatos de entrada específicos y siguen reglas programadas explícitamente, sin capacidad para inferir patrones 
+	nuevos en tiempo real.
+	\item Un solo LLM es capaz de realizar múltiples tareas sin configuración adicional y de adaptar su salida según 
+	el contexto. Por el contrario, los modelos tradicionales están diseñados para una tarea específica, por lo que 
+	se requiere un modelo separado para cada tarea.
+	\item Los LLM mantienen la coherencia en conversaciones largas, siendo capaces de recordar información dada en 
+	partes previas del diálogo. Los modelos tradicionales procesan cada entrada de manera independiente y no pueden 
+	conservar el estado conversacional.
+	\item Los LLM permiten una interacción bidireccional, donde pueden solicitar aclaraciones y ajustar sus respuestas 
+	en función del \textit{feedback} recibido. Los modelos tradicionales, en cambio, ofrecen una interacción unidireccional
+	y no manejan \textit{feedback} en tiempo real.
+\end{itemize}
+
+\vspace{10mm}
+
 %----------------------------------------------------------------------------------------
 \section{Generación aumentada por recuperación}
 
+Una limitación importante que presentan los LLM es que, debido a su naturaleza generalista, estos modelos pueden 
+carecer de precisión cuando se aplican a dominios específicos, ya que su conocimiento está limitado a la información 
+con la que fueron entrenados. Si bien esta información es sumamente vasta, no alcanza a cubrir la infinidad de temas 
+posibles, y no contempla contenido no disponible en fuentes públicas.
+
+Para abordar esta limitación, los LLM pueden adaptarse mediante la técnica conocida como recuperación aumentada por 
+generación (RAG, por sus siglas en inglés), integrando fuentes de datos especializadas que mejoran su precisión 
+en contextos concretos, como el entorno empresarial. De esta manera, los LLM pueden aprovechar su capacidad de 
+comprensión profunda del lenguaje, pero también acceder a información precisa y actualizada de documentos específicos.
+
+Básicamente, esta técnica consta de dos fases principales: primero, se realiza una búsqueda entre los documentos
+provistos y se seleccionan fragmentos que sean relevantes para la consulta del usuario. Luego, un modelo LLM
+utiliza esa información para construir una respuesta contextualizada. En la figura \ref{fig:rag} se ilustra
+un diagrama básico de funcionamiento.
+
+\vspace{3mm}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=.24]{./Figures/rag.png}
+	\caption{Diagrama de un sistema RAG.}
+	\label{fig:rag}
+\end{figure}
+
+La combinación de recuperación y generación permite un flujo de información enriquecido, logrando un equilibrio 
+entre las capacidades generales del modelo y la especificidad requerida en el contexto empresarial.
+
 %----------------------------------------------------------------------------------------
 \section{Frameworks utilizados}
+
+En el desarrollo de este trabajo se utilizaron una serie \textit{frameworks} que facilitaron la implementación de 
+cada parte del sistema. A continuación, se detallan sus principales características y su rol específico en el producto final.
+
+\begin{itemize}
+	\item \textbf{LangChain:} este framework fue fundamental para la construcción del sistema RAG, ya que permite una gestión 
+	eficiente de flujos de trabajo con modelos de lenguaje. LangChain facilita la integración de modelos LLM con fuentes de datos externas, 
+	lo cual es crucial en este proyecto para recuperar fragmentos relevantes de los documentos empresariales 
+	antes de generar la respuesta. Además, ofrece herramientas para diseñar flujos complejos 
+	que manejan las consultas del usuario, el proceso de recuperación y la generación de respuestas \citep{website:langchain}.
+	\item \textbf{FastAPI:} se utilizó para construir la API que conecta los componentes del sistema y gestiona las solicitudes del usuario. 
+	Este framework, reconocido por su alto rendimiento y facilidad de uso, permitió desarrollar una API eficiente y escalable que procesa 
+	las consultas en tiempo real. FastAPI facilita el manejo de solicitudes asíncronas y permite definir de manera clara los puntos 
+	de conexión de la API, asegurando que las interacciones entre el usuario, el sistema de recuperación y el modelo generativo se 
+	realicen de forma fluida y rápida \citep{website:fastapi}.
+	\item \textbf{NextUI:} para la interfaz gráfica del chatbot, se utilizó NextUI, un framework de diseño de interfaz de usuario 
+	basado en React que permite construir interfaces modernas y responsivas. NextUI facilitó la creación de una interfaz intuitiva 
+	y fácil de usar, que permite a los usuarios interactuar con el chatbot de manera fluida. Este framework ofrece una variedad de 
+	componentes preconstruidos y altamente personalizables, lo que ayudó a reducir el tiempo de desarrollo de la interfaz y asegurar 
+	una experiencia de usuario satisfactoria \citep{website:nextui}.
+\end{itemize}
 
 %----------------------------------------------------------------------------------------
 \section{Bases de datos vectoriales}
