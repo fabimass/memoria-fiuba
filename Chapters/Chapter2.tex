@@ -93,8 +93,6 @@ En este trabajo, el modelo LLM desempeña un papel central ya que es el encargad
 los usuarios y generar respuestas coherentes. Para seleccionar el modelo más adecuado, 
 se ensayaron diferentes variantes, cuyos detalles se describen en el capítulo \ref{Chapter4}.
 
-\vspace{5mm}
-
 \subsection{Modelos LLM versus modelos tradicionales}
 
 A continuación se mencionan las principales diferencias entre los modelos grandes de lenguaje y los
@@ -118,8 +116,6 @@ modelos tradicionales:
 	en función del \textit{feedback} recibido. Los modelos tradicionales, en cambio, ofrecen una interacción unidireccional
 	y no manejan \textit{feedback} en tiempo real.
 \end{itemize}
-
-\vspace{10mm}
 
 %----------------------------------------------------------------------------------------
 \section{Generación aumentada por recuperación}
@@ -152,6 +148,23 @@ La combinación de recuperación y generación permite un flujo de información 
 entre las capacidades generales del modelo y la especificidad requerida en el contexto empresarial.
 
 %----------------------------------------------------------------------------------------
+\section{Bases de datos vectoriales}
+
+Una base de datos de vectorial es una base de datos diseñada para almacenar y gestionar \textit{embeddings}. La misma
+cumple un papel fundamental en el contexto de este trabajo, ya que facilita la búsqueda de fragmentos de texto 
+relevantes para las consultas de los usuarios.
+
+A diferencia de las bases de datos tradicionales, en las que las consultas suelen coincidir exactamente con los valores almacenados, 
+las bases de datos vectoriales aplican métricas de similitud para identificar el vector más cercano a la consulta. 
+El proceso de recuperación se realiza calculando la distancia entre 
+el vector de la consulta y los vectores almacenados en la base de datos. Los fragmentos con menor distancia al vector 
+de la consulta son seleccionados como los más relevantes y luego utilizados como insumo en la fase de generación de respuesta. 
+
+Para seleccionar la base de datos vectorial más adecuada para este trabajo, se exploraron varias opciones de bases de datos 
+vectoriales disponibles en el mercado, evaluando aspectos como el rendimiento y la facilidad de integración con el chatbot. 
+Los resultados de estos ensayos se describen en el capítulo \ref{Chapter4}.
+
+%----------------------------------------------------------------------------------------
 \section{Frameworks utilizados}
 
 En el desarrollo de este trabajo se utilizaron una serie \textit{frameworks} que facilitaron la implementación de 
@@ -160,23 +173,40 @@ cada parte del sistema. A continuación, se detallan sus principales caracterís
 \begin{itemize}
 	\item \textbf{LangChain:} este framework fue fundamental para la construcción del sistema RAG, ya que permite una gestión 
 	eficiente de flujos de trabajo con modelos de lenguaje. LangChain facilita la integración de modelos LLM con fuentes de datos externas, 
-	lo cual es crucial en este proyecto para recuperar fragmentos relevantes de los documentos empresariales 
+	lo cual es crucial para recuperar fragmentos relevantes de los documentos empresariales 
 	antes de generar la respuesta. Además, ofrece herramientas para diseñar flujos complejos 
 	que manejan las consultas del usuario, el proceso de recuperación y la generación de respuestas \citep{website:langchain}.
 	\item \textbf{FastAPI:} se utilizó para construir la API que conecta los componentes del sistema y gestiona las solicitudes del usuario. 
-	Este framework, reconocido por su alto rendimiento y facilidad de uso, permitió desarrollar una API eficiente y escalable que procesa 
+	Este \textit{framework}, reconocido por su alto rendimiento y facilidad de uso, permitió desarrollar una API eficiente y escalable que procesa 
 	las consultas en tiempo real. FastAPI facilita el manejo de solicitudes asíncronas y permite definir de manera clara los puntos 
 	de conexión de la API, asegurando que las interacciones entre el usuario, el sistema de recuperación y el modelo generativo se 
 	realicen de forma fluida y rápida \citep{website:fastapi}.
-	\item \textbf{NextUI:} para la interfaz gráfica del chatbot, se utilizó NextUI, un framework de diseño de interfaz de usuario 
+	\item \textbf{NextUI:} es un framework de diseño de interfaces de usuario 
 	basado en React que permite construir interfaces modernas y responsivas. NextUI facilitó la creación de una interfaz intuitiva 
-	y fácil de usar, que permite a los usuarios interactuar con el chatbot de manera fluida. Este framework ofrece una variedad de 
+	y fácil de usar, que permite a los usuarios interactuar con el chatbot de manera fluida. Este \textit{framework} ofrece una variedad de 
 	componentes preconstruidos y altamente personalizables, lo que ayudó a reducir el tiempo de desarrollo de la interfaz y asegurar 
 	una experiencia de usuario satisfactoria \citep{website:nextui}.
 \end{itemize}
 
 %----------------------------------------------------------------------------------------
-\section{Bases de datos vectoriales}
+\section{Servicios en la nube utilizados}
 
-%----------------------------------------------------------------------------------------
-\section{Servicios en la nube}
+En este trabajo se empleó Microsoft Azure \citep{website:azure} como la plataforma principal de infraestructura en la nube, seleccionada por su robustez y 
+variedad de servicios orientados a aplicaciones de inteligencia artificial. Azure ofrece soluciones 
+escalables y seguras para gestionar datos y modelos, facilitando la integración de distintos recursos en un entorno controlado y eficiente.
+
+Los recursos específicos de Azure utilizados incluyen:
+
+\begin{itemize}
+	\item \textbf{Azure OpenAI:} este recurso se utilizó para desplegar el modelo de lenguaje LLM y el modelo de \textit{embeddings}, 
+	lo que provee la capacidad de procesamiento de lenguaje natural avanzada requerida por el sistema \citep{website:azure-openai}.
+	\item \textbf{Azure AI Search:} utilizado como base de datos vectorial, este servicio permite almacenar y recuperar \textit{embeddings} 
+	mediante búsquedas de similitud, mejorando la precisión en la recuperación de información \citep{website:ai-search}.
+	\item \textbf{Azure App Service:} empleado para hospedar el \textit{backend} del chatbot, este servicio garantiza un entorno seguro y 
+	escalable para la ejecución de la API y la gestión de consultas de los usuarios \citep{website:app-service}.
+	\item \textbf{Azure Static Web Apps:} utilizado para hospedar el \textit{frontend} del chatbot, proporcionando un despliegue 
+	rápido y eficiente de la interfaz de usuario, accesible para los empleados en cualquier ubicación \citep{website:static-web-app}.
+\end{itemize}
+
+Además, se implementó GitHub Actions \citep{website:github-actions} como pipeline de integración y despliegue continuo, no solo para publicar 
+actualizaciones del \textit{backend} y el \textit{frontend}, sino también para automatizar la actualización del contenido de la base de datos.
