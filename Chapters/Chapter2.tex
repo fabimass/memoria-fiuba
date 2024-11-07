@@ -6,7 +6,7 @@
 
 Este capítulo tiene como objetivo presentar las técnicas y herramientas clave utilizadas en el 
 desarrollo de este trabajo. Se analizan los enfoques fundamentales para el procesamiento de 
-lenguaje natural, junto con los modelos, frameworks e infraestructura necesarios para 
+lenguaje natural, junto con los modelos, \textit{frameworks} e infraestructura necesarios para 
 construir un sistema de recuperación de información eficiente y escalable. Este recorrido 
 técnico permite comprender los fundamentos sobre los que se apoya la solución implementada. 
 
@@ -15,7 +15,7 @@ técnico permite comprender los fundamentos sobre los que se apoya la solución 
 
 El procesamiento de lenguaje natural (NLP) es un área de la inteligencia artificial que permite 
 a las máquinas comprender e interpretar el lenguaje humano \citep{book:nlp}. Esto juega un papel esencial 
-para que el chatbot interprete las consultas de los usuarios y localice la información relevante en los 
+al permitir que el chatbot interprete las consultas de los usuarios y localice la información relevante en los 
 documentos procesados. Las técnicas de NLP aplicadas permiten que el sistema entienda el 
 significado de las consultas, independientemente de variaciones lingüísticas o de sintaxis. Entre los 
 métodos de mayor importancia para este trabajo se encuentran los \textit{word embeddings} y
@@ -24,13 +24,13 @@ métodos de mayor importancia para este trabajo se encuentran los \textit{word e
 \subsection{Word embeddings}
 
 Los \textit{embeddings} son una poderosa técnica para transformar datos complejos en formas numéricas que 
-pueden ser fácilmente procesadas y analizadas por algoritmos de aprendizaje automático. Esta técnica permite 
+son fácilmente procesadas y analizadas por algoritmos de aprendizaje automático. Esta técnica permite 
 representar virtualmente cualquier tipo de dato como vectores, lo que posibilita su manipulación en tareas de 
 procesamiento de lenguaje natural.
 
 Sin embargo, no se trata solo de convertir las palabras en vectores. Es crucial preservar el significado original 
 de los datos para que las tareas realizadas en este espacio transformado mantengan la coherencia semántica. 
-Por ejemplo, al comparar dos frases, no queremos simplemente comparar las palabras que contienen, sino evaluar 
+Por ejemplo, al comparar dos frases, no queremos simplemente analizar las palabras que contienen, sino evaluar 
 si ambas expresan un significado similar.
 
 Para conservar el significado, es necesario generar vectores donde las relaciones entre ellos sean representativas 
@@ -42,7 +42,7 @@ que la diferencia entre ``rey' y ``reina'' sea similar a la diferencia entre ``h
 relaciones semánticas subyacentes.
 
 En este trabajo, se ensayaron diferentes modelos de \textit{embeddings} de OpenAI, Google y Hugging Face, 
-cuya evaluación y selección se detalla en el capítulo \ref{Chapter4}.
+cuya evaluación y selección se detallan en el capítulo \ref{Chapter4}.
 
 \subsection{Transformers}
 
@@ -50,23 +50,25 @@ La arquitectura de \textit{transformers} ha revolucionado el procesamiento de le
 que permite a un modelo evaluar la relevancia de cada palabra en una secuencia en relación con las demás \citep{paper:transformers}. Este enfoque 
 supera las limitaciones de modelos secuenciales tradicionales, ya que permite procesar palabras en paralelo y captar dependencias de largo alcance 
 en el texto. En lugar de analizar cada palabra en un orden específico, el mecanismo de \textit{self-attention} permite que el modelo ``preste atención'' 
-a las palabras más relevantes en el contexto de la frase, asignando pesos a cada palabra según su importancia relativa en la oración.
+a las palabras más relevantes en el contexto de la frase, al asignar pesos a cada palabra según su importancia relativa en la oración.
 
 Gracias a esta capacidad, los \textit{transformers} pueden capturar relaciones contextuales complejas y matices semánticos entre las palabras, 
 lo que resulta fundamental para tareas como la generación de texto. Esta arquitectura ha hecho posible que los modelos comprendan y generen 
-lenguaje natural de una forma mucho más cercana a la comprensión humana, permitiendo respuestas precisas y contextualmente adecuadas. Esta técnica 
-ha sido fundamental en el desarrollo de los modelos grandes de lenguaje, los cuales se presentan en la siguiente sección.
+lenguaje natural de una forma mucho más cercana a la comprensión humana. Esta técnica 
+ha sido fundamental en el desarrollo de los modelos grandes de lenguaje, que se introducen a continuación.
 
 %----------------------------------------------------------------------------------------
 \section{Modelos grandes de lenguaje}
 
-Los modelos grandes de lenguaje (LLM, por sus siglas en inglés) son redes neuronales de gran escala, entrenadas 
+Los modelos grandes de lenguaje (LLM, por su sigla en inglés) son redes neuronales de gran escala, entrenadas 
 para comprender y generar texto en lenguaje natural. Estos modelos, basados en arquitecturas de \textit{transformers}, 
 están compuestos por millones o incluso billones de parámetros, lo que les permite capturar patrones complejos y 
 relaciones contextuales en vastos conjuntos de datos de texto. Los LLM son capaces de realizar múltiples 
 tareas de procesamiento de lenguaje natural, como la generación de texto, la traducción 
 automática y el resumen de documentos. En la tabla \ref{tab:llms} se presentan 
 algunos de los modelos más relevantes en la actualidad \citep{website:lifearchitect}.
+
+\vspace{5mm}
 
 \begin{table}[h]
 	\centering
@@ -89,6 +91,8 @@ algunos de los modelos más relevantes en la actualidad \citep{website:lifearchi
 	\label{tab:llms}
 \end{table}
 
+\vspace{5mm}
+
 En este trabajo, el modelo LLM desempeña un papel central ya que es el encargado de entender las consultas de 
 los usuarios y generar respuestas coherentes. Para seleccionar el modelo más adecuado, 
 se ensayaron diferentes variantes, cuyos detalles se describen en el capítulo \ref{Chapter4}.
@@ -100,8 +104,8 @@ modelos tradicionales:
 
 \begin{itemize}
 	\item Los LLM pueden adaptarse a nuevas tareas simplemente utilizando ejemplos en el \textit{prompt}, 
-	sin necesidad de modificar sus parámetros o realizar reentrenamiento. Esto contrasta con los modelos tradicionales, 
-	que requieren grandes conjuntos de datos etiquetados y reentrenamiento cada vez que se incorporan nuevas tareas.
+	sin necesidad de modificar sus parámetros o re-entrenar. Esto contrasta con los modelos tradicionales, 
+	que requieren grandes conjuntos de datos etiquetados y re-entrenarse cada vez que se incorporan nuevas tareas.
 	\item Los LLM comprenden instrucciones en lenguaje natural, lo que les permite seguir instrucciones complejas e 
 	incluso inferir reglas implícitas a partir de ejemplos. Los modelos tradicionales, en cambio, suelen necesitar 
 	formatos de entrada específicos y siguen reglas programadas explícitamente, sin capacidad para inferir patrones 
@@ -120,13 +124,13 @@ modelos tradicionales:
 %----------------------------------------------------------------------------------------
 \section{Generación aumentada por recuperación}
 
-Una limitación importante que presentan los LLM es que, debido a su naturaleza generalista, estos modelos pueden 
+Una limitación importante que presentan los LLM es que, debido a su naturaleza generalista, pueden 
 carecer de precisión cuando se aplican a dominios específicos, ya que su conocimiento está limitado a la información 
 con la que fueron entrenados. Si bien esta información es sumamente vasta, no alcanza a cubrir la infinidad de temas 
 posibles, y no contempla contenido no disponible en fuentes públicas.
 
 Para abordar esta limitación, los LLM pueden adaptarse mediante la técnica conocida como recuperación aumentada por 
-generación (RAG, por sus siglas en inglés), integrando fuentes de datos especializadas que mejoran su precisión 
+generación (RAG), integrando fuentes de datos especializadas que mejoran su precisión 
 en contextos concretos, como el entorno empresarial. De esta manera, los LLM pueden aprovechar su capacidad de 
 comprensión profunda del lenguaje, pero también acceder a información precisa y actualizada de documentos específicos.
 
@@ -144,24 +148,23 @@ un diagrama básico de funcionamiento.
 	\label{fig:rag}
 \end{figure}
 
-La combinación de recuperación y generación permite un flujo de información enriquecido, logrando un equilibrio 
+La combinación de recuperación y generación permite un flujo de información enriquecido, al lograr un equilibrio 
 entre las capacidades generales del modelo y la especificidad requerida en el contexto empresarial.
 
 %----------------------------------------------------------------------------------------
 \section{Bases de datos vectoriales}
 
 Una base de datos de vectorial es una base de datos diseñada para almacenar y gestionar \textit{embeddings}. La misma
-cumple un papel fundamental en el contexto de este trabajo, ya que facilita la búsqueda de fragmentos de texto 
-relevantes para las consultas de los usuarios.
+cumple un papel fundamental en la etapa de recuperación de información.
 
 A diferencia de las bases de datos tradicionales, en las que las consultas suelen coincidir exactamente con los valores almacenados, 
 las bases de datos vectoriales aplican métricas de similitud para identificar el vector más cercano a la consulta. 
 El proceso de recuperación se realiza calculando la distancia entre 
 el vector de la consulta y los vectores almacenados en la base de datos. Los fragmentos con menor distancia al vector 
-de la consulta son seleccionados como los más relevantes y luego utilizados como insumo en la fase de generación de respuesta. 
+de la consulta son seleccionados como los más relevantes y luego utilizados como insumo en la fase de generación de la respuesta. 
 
-Para seleccionar la base de datos vectorial más adecuada para este trabajo, se exploraron varias opciones de bases de datos 
-vectoriales disponibles en el mercado, evaluando aspectos como el rendimiento y la facilidad de integración con el chatbot. 
+Para seleccionar la base de datos vectorial más adecuada para este trabajo, se exploraron varias opciones 
+disponibles en el mercado, evaluando aspectos como el rendimiento y la facilidad de integración con el chatbot. 
 Los resultados de estos ensayos se describen en el capítulo \ref{Chapter4}.
 
 %----------------------------------------------------------------------------------------
@@ -171,20 +174,19 @@ En el desarrollo de este trabajo se utilizaron una serie \textit{frameworks} que
 cada parte del sistema. A continuación, se detallan sus principales características y su rol específico en el producto final.
 
 \begin{itemize}
-	\item \textbf{LangChain:} este framework fue fundamental para la construcción del sistema RAG, ya que permite una gestión 
+	\item \textbf{LangChain:} este \textit{framework} fue fundamental para la construcción del sistema RAG, ya que permite una gestión 
 	eficiente de flujos de trabajo con modelos de lenguaje. LangChain facilita la integración de modelos LLM con fuentes de datos externas, 
-	lo cual es crucial para recuperar fragmentos relevantes de los documentos empresariales 
-	antes de generar la respuesta. Además, ofrece herramientas para diseñar flujos complejos 
+	y además ofrece herramientas para diseñar flujos complejos 
 	que manejan las consultas del usuario, el proceso de recuperación y la generación de respuestas \citep{website:langchain}.
 	\item \textbf{FastAPI:} se utilizó para construir la API que conecta los componentes del sistema y gestiona las solicitudes del usuario. 
 	Este \textit{framework}, reconocido por su alto rendimiento y facilidad de uso, permitió desarrollar una API eficiente y escalable que procesa 
 	las consultas en tiempo real. FastAPI facilita el manejo de solicitudes asíncronas y permite definir de manera clara los puntos 
-	de conexión de la API, asegurando que las interacciones entre el usuario, el sistema de recuperación y el modelo generativo se 
+	de conexión de la API, asegurando que las interacciones entre el \textit{frontend} y el \textit{backend} se 
 	realicen de forma fluida y rápida \citep{website:fastapi}.
-	\item \textbf{NextUI:} es un framework de diseño de interfaces de usuario 
+	\item \textbf{NextUI:} es un \textit{framework} de diseño de interfaces de usuario 
 	basado en React que permite construir interfaces modernas y responsivas. NextUI facilitó la creación de una interfaz intuitiva 
 	y fácil de usar, que permite a los usuarios interactuar con el chatbot de manera fluida. Este \textit{framework} ofrece una variedad de 
-	componentes preconstruidos y altamente personalizables, lo que ayudó a reducir el tiempo de desarrollo de la interfaz y asegurar 
+	componentes pre-construidos y altamente personalizables, lo que ayudó a reducir el tiempo de desarrollo de la interfaz y asegurar 
 	una experiencia de usuario satisfactoria \citep{website:nextui}.
 \end{itemize}
 
@@ -201,12 +203,12 @@ Los recursos específicos de Azure utilizados incluyen:
 	\item \textbf{Azure OpenAI:} este recurso se utilizó para desplegar el modelo de lenguaje LLM y el modelo de \textit{embeddings}, 
 	lo que provee la capacidad de procesamiento de lenguaje natural avanzada requerida por el sistema \citep{website:azure-openai}.
 	\item \textbf{Azure AI Search:} utilizado como base de datos vectorial, este servicio permite almacenar y recuperar \textit{embeddings} 
-	mediante búsquedas de similitud, mejorando la precisión en la recuperación de información \citep{website:ai-search}.
+	mediante búsquedas de similitud \citep{website:ai-search}.
 	\item \textbf{Azure App Service:} empleado para hospedar el \textit{backend} del chatbot, este servicio garantiza un entorno seguro y 
 	escalable para la ejecución de la API y la gestión de consultas de los usuarios \citep{website:app-service}.
-	\item \textbf{Azure Static Web Apps:} utilizado para hospedar el \textit{frontend} del chatbot, proporcionando un despliegue 
-	rápido y eficiente de la interfaz de usuario, accesible para los empleados en cualquier ubicación \citep{website:static-web-app}.
+	\item \textbf{Azure Static Web Apps:} utilizado para hospedar el \textit{frontend} del chatbot, proporciona un despliegue 
+	rápido y eficiente de la interfaz de usuario y puede ser accedido por los empleados desde cualquier ubicación \citep{website:static-web-app}.
 \end{itemize}
 
-Además, se implementó GitHub Actions \citep{website:github-actions} como pipeline de integración y despliegue continuo, no solo para publicar 
+Además, se implementó GitHub Actions \citep{website:github-actions} como \textit{pipeline} de integración y despliegue continuo, no solo para publicar 
 actualizaciones del \textit{backend} y el \textit{frontend}, sino también para automatizar la actualización del contenido de la base de datos.

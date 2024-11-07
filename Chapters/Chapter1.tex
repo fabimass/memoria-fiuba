@@ -22,23 +22,22 @@ A continuación, se expone el estado del arte de las tecnologías aplicadas.
 Finalmente, se detallan el alcance y los requerimientos necesarios para su implementación.
 
 %----------------------------------------------------------------------------------------
-\section{Introducción a la problemática}
+\section{Marco de la propuesta}
 
 En un entorno empresarial, la eficiencia en la búsqueda de información es crucial para la
 productividad y el rendimiento de los empleados. Sin embargo, con la creciente cantidad de
 datos y documentos disponibles, encontrar información específica de manera rápida y precisa
 puede convertirse en un desafío.
 
-A lo largo de mi experiencia en la empresa donde me desempeño, he observado cómo la abundancia 
-de fuentes de información puede, paradójicamente, dificultar el trabajo. Existen múltiples 
-repositorios de documentos, políticas y datos históricos, pero la falta de centralización y la 
+La abundancia de fuentes de información, lejos de agilizar el trabajo, a menudo lo complica. En una empresa, 
+es común que existan múltiples repositorios de documentos, políticas y datos históricos, pero la falta de centralización y la 
 dificultad para identificar la fuente correcta suelen traducirse en pérdidas de tiempo significativas. 
-En muchas ocasiones, he dedicado más tiempo a la búsqueda de información que a la ejecución de las tareas 
+En muchas ocasiones, se dedica más tiempo a la búsqueda de información que a la ejecución de las tareas 
 en sí, lo que afecta tanto la productividad como la efectividad en la toma de decisiones.
 
-
-%----------------------------------------------------------------------------------------
-\section{Marco de la propuesta}
+El presente trabajo surgió como un desarrollo personal para abordar esta problemática. Su propósito fue 
+proponer una solución que facilite el acceso ágil y preciso a la información necesaria, de manera tal
+que optimice el uso del tiempo en un entorno con gran cantidad de fuentes de información.
 
 Un chatbot especializado ofrece una solución prometedora al permitir a los usuarios realizar 
 consultas en lenguaje natural y obtener respuestas de manera instantánea. Mientras que otros sistemas 
@@ -46,12 +45,12 @@ de inteligencia artificial ampliamente conocidos y utilizados
 destacan en su capacidad para generar respuestas generales basadas en un amplio conocimiento del 
 lenguaje, el presente trabajo se distingue por su capacidad para trabajar con documentos altamente 
 específicos (y potencialmente privados). Esto le permite ofrecer respuestas adaptadas al contexto 
-interno de la organización, las cuales no podrían obtenerse mediante el uso de los chatbots de 
+interno de la organización, que no podrían obtenerse mediante el uso de los chatbots de 
 propósito general disponibles en el mercado \citep{website:chatgpt} \citep{website:copilot} \citep{website:gemini}.
 
 En la figura \ref{fig:diagrama-bloques-basico} se presenta un diagrama de alto nivel de la solución.
-En primer lugar, los usuarios interactúan con el chatbot a través de una interfaz gráfica desde la
-cual pueden realizar consultas sobre la información deseada. Estas consultas, procesadas mediante 
+En primer lugar, los usuarios interactúan con el chatbot a través de una interfaz gráfica desde donde
+pueden realizar consultas sobre la información deseada. Estas consultas, procesadas mediante 
 técnicas de lenguaje natural, permiten extraer la información más relevante de la fuente de documentos. 
 Luego, un modelo de inteligencia artificial interpreta las consultas y genera respuestas que proporcionan 
 al usuario la información solicitada de manera precisa y contextualizada.
@@ -69,7 +68,7 @@ al usuario la información solicitada de manera precisa y contextualizada.
 \section{Estado del arte}
 
 El desarrollo de chatbots y sistemas de recuperación de información ha avanzado considerablemente en los últimos años, 
-impulsado por mejoras en el procesamiento de lenguaje natural (NLP, por sus siglas en inglés) y el acceso a grandes volúmenes de datos. 
+impulsado por mejoras en el procesamiento de lenguaje natural (NLP, por su sigla en inglés) y el acceso a grandes volúmenes de datos. 
 En este contexto, los chatbots especializados han surgido como soluciones destacadas para el acceso eficiente 
 a información específica en distintos entornos, incluyendo el empresarial. A continuación, se presenta una revisión 
 de las principales tecnologías y enfoques actuales que sustentan el desarrollo del presente trabajo.
@@ -78,7 +77,7 @@ Los chatbots modernos han evolucionado desde sistemas de reglas simples hasta mo
 mantener conversaciones complejas. Entre los primeros desarrollos, como ELIZA \citep{paper:eliza} en 
 la década de 1960, se empleaban reglas predefinidas que limitaban la interacción a una cantidad pequeña de 
 respuestas posibles. Sin embargo, el uso de redes neuronales y el aprendizaje profundo en las últimas décadas 
-han revolucionado el campo, permitiendo la aparición de sistemas como Siri de Apple, Alexa de Amazon 
+han revolucionado el campo, al permitir la aparición de sistemas como Siri de Apple, Alexa de Amazon 
 y Google Assistant \citep{article:voice-assistants}. Estos asistentes virtuales han popularizado el uso de interfaces 
 de conversación en la vida cotidiana, ya que son capaces de responder a preguntas comunes, realizar tareas administrativas 
 y ofrecer asistencia en tiempo real.
@@ -103,24 +102,23 @@ o Google Gemini \citep{website:gemini}, cuyas interfaces se observan en la figur
 
 Si bien los modelos generativos han alcanzado un alto grado de sofisticación, presentan algunas limitaciones importantes. 
 En primer lugar, su conocimiento es en gran medida de propósito general, dado que han sido entrenados con grandes volúmenes 
-de datos públicos y no específicos, lo cual limita su precisión cuando se requiere información particular de una organización. 
+de datos públicos y no específicos, lo que limita su precisión cuando se requiere información particular de una organización. 
 En segundo lugar, estos modelos tienden a ``inventar'' respuestas cuando no encuentran información relevante, fenómeno conocido 
 como \textit{hallucinations} \citep{article:hallucinations}. En un contexto empresarial, esto puede provocar confusión o incluso 
 proporcionar información errónea.
 
 En la búsqueda de soluciones que combinen la capacidad de los modelos generativos con la precisión de la información propietaria, 
-ha surgido el enfoque de generación aumentada por recuperación (RAG, por sus siglas en inglés). Este enfoque combina sistemas de 
+ha surgido el enfoque de generación aumentada por recuperación (RAG, por su sigla en inglés). Este enfoque combina sistemas de 
 recuperación de información con modelos de generación de texto, lo que permite que las respuestas no solo se basen en la capacidad 
 generativa del modelo, sino también en una búsqueda previa en bases de datos o documentos específicos \citep{paper:rag-1} 
 \citep{paper:rag-2}.
 
-El presente trabajo se apoya en el estado del arte de los modelos de lenguaje y la técnica de RAG para crear una solución innovadora 
-que mejora la productividad al centralizar y optimizar el acceso a la información relevante en el entorno laboral.
+El presente trabajo se apoya en el estado del arte de los modelos de lenguaje y la técnica de RAG para crear una solución innovadora.
 
 \vspace{10mm}
 
 %----------------------------------------------------------------------------------------
-\section{Motivación y alcance}
+\section{Objetivos y alcance}
 
 El propósito de este trabajo fue optimizar el proceso de búsqueda de información por parte de los empleados. Se buscó
 proporcionar una herramienta eficaz que permita acceder rápidamente a los datos relevantes, que mejore la eficiencia y 
