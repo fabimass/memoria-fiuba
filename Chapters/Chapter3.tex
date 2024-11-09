@@ -17,13 +17,13 @@
   captionpos=b,                    % sets the caption-position to bottom
   commentstyle=\color{mygreen},    % comment style
   deletekeywords={...},            % if you want to delete keywords from the given language
-  %escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
-  %extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
-  %frame=single,	                % adds a frame around the code
+  %escapeinside={\%*}{*)},         % if you want to add LaTeX within your code
+  %extendedchars=true,             % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  %frame=single,	                 % adds a frame around the code
   keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
   keywordstyle=\color{blue},       % keyword style
   language=[ANSI]C,                % the language of the code
-  %otherkeywords={*,...},           % if you want to add more keywords to the set
+  %otherkeywords={*,...},          % if you want to add more keywords to the set
   numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
   numbersep=5pt,                   % how far the line-numbers are from the code
   numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
@@ -33,7 +33,7 @@
   showtabs=false,                  % show tabs within strings adding particular underscores
   stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
   stringstyle=\color{mymauve},     % string literal style
-  tabsize=2,	                   % sets default tabsize to 2 spaces
+  tabsize=2,	                     % sets default tabsize to 2 spaces
   title=\lstname,                  % show the filename of files included with \lstinputlisting; also try caption instead of title
   morecomment=[s]{/*}{*/}
 }
@@ -41,10 +41,39 @@
 
 %----------------------------------------------------------------------------------------
 
-Todos los capítulos deben comenzar con un breve párrafo introductorio que indique cuál es el contenido que se encontrará al leerlo.  La redacción sobre el contenido de la memoria debe hacerse en presente y todo lo referido al proyecto en pasado, siempre de modo impersonal.
+Este capítulo describe el diseño y la implementación de cada uno de los componentes que conforman el sistema.
+Se explican las decisiones de diseño, los flujos de trabajo y los aspectos técnicos involucrados en la construcción de cada módulo principal.
 
 %---------------------------------------------------------------------------------------
 \section{Arquitectura del sistema}
+
+El sistema está diseñado para permitir la implementación y operación de un chatbot mediante un enfoque de recuperación aumentada por generación. 
+Se implementó una arquitectura modular, basada en servicios en la nube, que facilita la escalabilidad y el mantenimiento del chatbot, y permite 
+una actualización ágil de los componentes y una experiencia optimizada para los usuarios finales. En la figura \ref{fig:architecture} se ilustra
+el diagrama de arquitectura, donde se observan la totalidad de los componentes que conforman el sistema.
+
+En primer lugar, los usuarios interactúan con el chatbot a través de una interfaz gráfica (desarrollada con NextUI y deployada en Azure Static Web App), 
+donde consultan por la información deseada. Estas consultas son luego transferidas al servidor (Azure App Service) a través de una API desarrollada 
+con la librería FastAPI. Una vez allí, se realiza un proceso de búsqueda por similitud que toma la consulta del usuario y la compara con la información
+disponible en la base de datos (Azure AI Search), con el objetivo de identificar aquellos fragmentos más relevantes. Previamente, un administrador
+debe haber cargado aquellos documentos que conforman la base de conocimiento del chatbot en un repositorio de GitHub, tras lo cual se ejecuta la 
+automatización que procesa los documentos y los envía a la base de datos.
+
+Para alimentar esta base de conocimiento, un administrador carga los documentos en un repositorio de GitHub, donde una automatización (desarrollada 
+utilizando GitHub Actions) procesa los documentos y los transfiere a la base de datos.
+
+Finalmente, la consulta del usuario y los fragmentos relevantes se envían al modelo LLM (desplegado en el servicio Azure OpenAI), que genera una 
+respuesta contextualizada. Esta respuesta es devuelta a la interfaz gráfica para ser presentada al usuario.
+
+Además, se incluye una pequeña base de datos adicional (Azure Table Storage) que se utiliza para guardar el \textit{feedback} de los usuarios, 
+para así obtener métricas del desempeño del chatbot.  
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=.3]{./Figures/arquitectura.png}
+	\caption{Diagrama de la arquitectura del sistema.}
+	\label{fig:architecture}
+\end{figure}
  
 %---------------------------------------------------------------------------------------
 \section{Configuración de la infraestructura en la nube}
