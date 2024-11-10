@@ -78,6 +78,65 @@ para así obtener métricas del desempeño del chatbot.
 %---------------------------------------------------------------------------------------
 \section{Configuración de la infraestructura en la nube}
 
+Para garantizar el despliegue, disponibilidad y escalabilidad del sistema, se configuró una infraestructura en la nube basada en Microsoft Azure. 
+A continuación, se describen los pasos principales para la configuración de cada recurso empleado en el proyecto.
+
+\subsection{OpenAI Service}
+
+Este servicio se utilizó para desplegar los modelos de lenguaje y de \textit{embeddings}.
+
+El servicio de Azure OpenAI proporciona acceso a los potentes modelos de lenguaje de OpenAI, incluidos los modelos más recientes. Estos modelos se pueden adaptar fácilmente a tareas específicas, como en nuestro caso es la generación de contenido.
+
+Para la configuración de Azure OpenAI Service, se seleccionó East US como región, junto con el nivel de precios Standard S0, adecuado para balancear el costo y el rendimiento del sistema.
+
+Como medida de seguridad, se configuraron reglas de firewall en el servicio para restringir el acceso únicamente al rango de direcciones IP del backend alojado en Azure App Service. Esto asegura que solo las solicitudes provenientes de la aplicación puedan acceder al modelo de lenguaje, protegiendo así el servicio de accesos no autorizados.
+
+Una vez desplegado Azure OpenAI Service, fue necesario seleccionar y desplegar los modelos específicos requeridos para la funcionalidad del chatbot. En este caso, se optó por el modelo gpt-4o como modelo de lenguaje para generación de respuestas y text-embeddings-ada-002 para el cálculo de embeddings de texto. Estos modelos permiten al sistema interpretar consultas y realizar búsquedas semánticas en la base de datos de manera precisa y eficiente.
+
+Adicionalmente, es fundamental obtener el endpoint y la key del servicio, ya que estos valores se utilizan para la comunicación programática con Azure OpenAI. Estos datos se almacenan en el backend como variables de entorno para que el sistema pueda acceder al servicio de manera segura y conforme a las mejores prácticas de seguridad en la nube.
+
+GPT-4o está diseñado para brindar velocidad y eficiencia. Iguala la inteligencia del anterior modelo GPT-4 Turbo, y es notablemente más eficiente y entrega texto al doble de velocidad y a la mitad del costo. Además, exhibe el rendimiento más alto en idiomas distintos del inglés en comparación con los modelos de OpenAI anteriores.
+
+ada-002 supera a todos los modelos de embeddings anteriores en tareas de búsqueda de texto y similitud de oraciones.
+
+\begin{table}[h]
+	\centering
+	\caption[Modelos LLM disponibles en el mercado]{Modelos LLM disponibles en el mercado}
+	\begin{tabular}{l c}    
+		\toprule
+		\textbf{Modelo} 	 & \textbf{Creador} 	\\
+		\midrule
+		GPT-4o               & OpenAI 				\\		
+		Gemini 1.5      	 & Google				\\
+		LLaMa 3         	 & Meta				    \\
+    GPT-4         	     & OpenAI				\\
+    LLaMa 2         	 & Meta				    \\
+    Mistral-7B         	 & Mistral AI		    \\
+    BLOOM         	     & BigScience		    \\
+    GPT-3.5         	 & OpenAI				\\
+		\bottomrule
+		\hline
+	\end{tabular}
+	\label{tab:llms}
+\end{table}
+
+Configuración	Detalles
+Región	East US
+Nivel de Precios	Standard S0
+Reglas de Firewall	Acceso limitado al rango de IP del backend (App Service)
+Modelos Implementados	- gpt-4o (modelo de lenguaje LLM)
+- text-embeddings-ada-002 (modelo de embeddings)
+Credenciales Requeridas	Endpoint y Key del servicio para acceso programático
+Uso de Credenciales	Almacenadas como variables de entorno en el backend para acceso seguro
+
+\subsection{AI Search}
+
+\subsection{App Service }
+
+\subsection{Static Web App}
+
+\subsection{Table Storage}
+
 %---------------------------------------------------------------------------------------
 \section{Procesamiento de los documentos}
 
