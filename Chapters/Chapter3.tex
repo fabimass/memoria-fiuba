@@ -68,13 +68,17 @@ respuesta contextualizada. Esta respuesta es devuelta a la interfaz gráfica par
 Además, se incluye una pequeña base de datos adicional (Azure Table Storage) que se utiliza para guardar el \textit{feedback} de los usuarios, 
 para así obtener métricas del desempeño del chatbot.  
 
+\vspace{10mm}
+
 \begin{figure}[ht]
 	\centering
-	\includegraphics[scale=.3]{./Figures/arquitectura.png}
+	\includegraphics[scale=.55]{./Figures/arquitectura.png}
 	\caption{Diagrama de la arquitectura del sistema.}
 	\label{fig:architecture}
 \end{figure}
- 
+
+\vspace{5mm}
+
 %---------------------------------------------------------------------------------------
 \section{Configuración de la infraestructura en la nube}
 
@@ -83,51 +87,50 @@ A continuación, se describen los pasos principales para la configuración de ca
 
 \subsection{OpenAI Service}
 
-Este servicio se utilizó para desplegar los modelos de lenguaje y de \textit{embeddings}.
+El servicio de Azure OpenAI proporciona acceso a los potentes modelos de lenguaje de OpenAI, incluidos los modelos más recientes. 
+Estos modelos pueden adaptarse fácilmente a tareas específicas, como en nuestro caso es la generación de contenido.
 
-El servicio de Azure OpenAI proporciona acceso a los potentes modelos de lenguaje de OpenAI, incluidos los modelos más recientes. Estos modelos se pueden adaptar fácilmente a tareas específicas, como en nuestro caso es la generación de contenido.
+En la tabla \ref{tab:config-openai} se presenta un resumen de las configuraciones realizadas. 
+Se seleccionó \textit{East US} como región, junto con el modelo de precios \textit{Standard S0}, 
+adecuado para balancear el costo y el rendimiento del sistema.
 
-Para la configuración de Azure OpenAI Service, se seleccionó East US como región, junto con el nivel de precios Standard S0, adecuado para balancear el costo y el rendimiento del sistema.
+Como medida de seguridad, se configuraron reglas de red para restringir el acceso únicamente al rango 
+de direcciones IP del \textit{backend} alojado en Azure App Service. Esto asegura que solo las solicitudes provenientes de la 
+aplicación puedan acceder al modelo de lenguaje, lo que protege el servicio de accesos no autorizados.
 
-Como medida de seguridad, se configuraron reglas de firewall en el servicio para restringir el acceso únicamente al rango de direcciones IP del backend alojado en Azure App Service. Esto asegura que solo las solicitudes provenientes de la aplicación puedan acceder al modelo de lenguaje, protegiendo así el servicio de accesos no autorizados.
+Una vez desplegado el recurso, fue necesario seleccionar y desplegar los modelos específicos requeridos para la funcionalidad del chatbot. 
+En este caso, se optó por los siguientes modelos:
 
-Una vez desplegado Azure OpenAI Service, fue necesario seleccionar y desplegar los modelos específicos requeridos para la funcionalidad del chatbot. En este caso, se optó por el modelo gpt-4o como modelo de lenguaje para generación de respuestas y text-embeddings-ada-002 para el cálculo de embeddings de texto. Estos modelos permiten al sistema interpretar consultas y realizar búsquedas semánticas en la base de datos de manera precisa y eficiente.
+\begin{itemize}
+	\item \textit{GPT-4o} como modelo de lenguaje para generación de respuestas. Este modelo está diseñado para brindar velocidad 
+  y eficiencia, iguala la inteligencia de su antecesor \textit{GPT-4 Turbo}, y es notablemente más eficiente al entregar texto al 
+  doble de velocidad y a la mitad del costo. Además, exhibe el rendimiento más alto en idiomas distintos del inglés en comparación 
+  con los modelos de OpenAI anteriores.
+	\item \textit{Ada-002} para el cálculo de \textit{embeddings} de texto. Este modelo supera a todos los modelos de \textit{embeddings} 
+  anteriores en tareas de búsqueda de texto y similitud de oraciones.
+\end{itemize}
 
-Adicionalmente, es fundamental obtener el endpoint y la key del servicio, ya que estos valores se utilizan para la comunicación programática con Azure OpenAI. Estos datos se almacenan en el backend como variables de entorno para que el sistema pueda acceder al servicio de manera segura y conforme a las mejores prácticas de seguridad en la nube.
-
-GPT-4o está diseñado para brindar velocidad y eficiencia. Iguala la inteligencia del anterior modelo GPT-4 Turbo, y es notablemente más eficiente y entrega texto al doble de velocidad y a la mitad del costo. Además, exhibe el rendimiento más alto en idiomas distintos del inglés en comparación con los modelos de OpenAI anteriores.
-
-ada-002 supera a todos los modelos de embeddings anteriores en tareas de búsqueda de texto y similitud de oraciones.
+Adicionalmente, es fundamental obtener el \textit{endpoint} y la \textit{key} del servicio, valores que se utilizan luego para la comunicación programática 
+con Azure OpenAI. Estos datos se almacenan en el \textit{backend} como variables de entorno para que el sistema pueda acceder al servicio de manera segura.
 
 \begin{table}[h]
 	\centering
-	\caption[Modelos LLM disponibles en el mercado]{Modelos LLM disponibles en el mercado}
+	\caption[Configuración de Azure OpenAI]{Configuración de Azure OpenAI}
 	\begin{tabular}{l c}    
 		\toprule
-		\textbf{Modelo} 	 & \textbf{Creador} 	\\
+		\textbf{Configuración} 	 & \textbf{Detalles} 	\\
 		\midrule
-		GPT-4o               & OpenAI 				\\		
-		Gemini 1.5      	 & Google				\\
-		LLaMa 3         	 & Meta				    \\
-    GPT-4         	     & OpenAI				\\
-    LLaMa 2         	 & Meta				    \\
-    Mistral-7B         	 & Mistral AI		    \\
-    BLOOM         	     & BigScience		    \\
-    GPT-3.5         	 & OpenAI				\\
+		Región &	East US 				\\		
+		Nivel de precios & Standard S0				\\
+		Reglas de Firewall & Rango IP de App Service 				    \\
+    Modelos desplegados	& gpt-4o				\\
+            	 & text-embeddings-ada-002			    \\
+    Credenciales	& Endpoint y Key 		    \\
 		\bottomrule
 		\hline
 	\end{tabular}
-	\label{tab:llms}
+	\label{tab:config-openai}
 \end{table}
-
-Configuración	Detalles
-Región	East US
-Nivel de Precios	Standard S0
-Reglas de Firewall	Acceso limitado al rango de IP del backend (App Service)
-Modelos Implementados	- gpt-4o (modelo de lenguaje LLM)
-- text-embeddings-ada-002 (modelo de embeddings)
-Credenciales Requeridas	Endpoint y Key del servicio para acceso programático
-Uso de Credenciales	Almacenadas como variables de entorno en el backend para acceso seguro
 
 \subsection{AI Search}
 
