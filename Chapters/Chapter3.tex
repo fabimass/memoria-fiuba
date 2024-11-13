@@ -54,30 +54,27 @@ el diagrama de arquitectura, donde se observan la totalidad de los componentes q
 
 En primer lugar, los usuarios interactúan con el chatbot a través de una interfaz gráfica (desarrollada con NextUI y deployada en Azure Static Web App), 
 donde consultan por la información deseada. Estas consultas son luego transferidas al servidor (Azure App Service) a través de una API desarrollada 
-con la librería FastAPI. Una vez allí, se realiza un proceso de búsqueda por similitud que toma la consulta del usuario y la compara con la información
+con la librería FastAPI. Una vez allí, se realiza un proceso de búsqueda por similitud que toma la solicitud del usuario y la compara con la información
 disponible en la base de datos (Azure AI Search), con el objetivo de identificar aquellos fragmentos más relevantes. Previamente, un administrador
-debe haber cargado aquellos documentos que conforman la base de conocimiento del chatbot en un repositorio de GitHub, tras lo cual se ejecuta la 
-automatización que procesa los documentos y los envía a la base de datos.
-
-Para alimentar esta base de conocimiento, un administrador carga los documentos en un repositorio de GitHub, donde una automatización (desarrollada 
-utilizando GitHub Actions) procesa los documentos y los transfiere a la base de datos.
+debe haber cargado aquellos documentos que conforman la base de conocimiento del chatbot en un repositorio de GitHub, tras lo cual se ejecuta una 
+automatización que los procesa y los envía a la base de datos.
 
 Finalmente, la consulta del usuario y los fragmentos relevantes se envían al modelo LLM (desplegado en el servicio Azure OpenAI), que genera una 
-respuesta contextualizada. Esta respuesta es devuelta a la interfaz gráfica para ser presentada al usuario.
+respuesta contextualizada, que es devuelta a la interfaz gráfica para ser presentada al usuario.
 
-Además, se incluye una pequeña base de datos adicional (Azure Table Storage) que se utiliza para guardar el \textit{feedback} de los usuarios, 
+Además, se incluye una pequeña base de datos adicional (Azure Table Storage) que se utiliza para guardar el feedback de los usuarios, 
 para así obtener métricas del desempeño del chatbot.  
 
-\vspace{10mm}
+\vspace{30mm}
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=.55]{./Figures/arquitectura.png}
-	\caption{Diagrama de la arquitectura del sistema.}
+	\caption{Diagrama de arquitectura del sistema.}
 	\label{fig:architecture}
 \end{figure}
 
-\vspace{5mm}
+\vspace{8mm}
 
 %---------------------------------------------------------------------------------------
 \section{Configuración de la infraestructura en la nube}
@@ -87,18 +84,18 @@ A continuación, se describen los pasos principales para la configuración de ca
 
 \subsection{OpenAI Service}
 
-El servicio de Azure OpenAI proporciona acceso a los potentes modelos de lenguaje de OpenAI, incluidos los modelos más recientes. 
-Estos modelos pueden adaptarse fácilmente a tareas específicas, como en nuestro caso es la generación de contenido.
+El servicio de Azure OpenAI proporciona acceso a los potentes modelos de lenguaje de OpenAI, incluidos los más recientes. 
+Estos modelos pueden adaptarse fácilmente a tareas específicas, como en este caso es la generación de contenido.
 
 En la tabla \ref{tab:config-openai} se presenta un resumen de las configuraciones realizadas. 
 Se seleccionó \textit{East US} como región, junto con el modelo de precios \textit{Standard S0}, 
 adecuado para balancear el costo y el rendimiento del sistema.
 
 Como medida de seguridad, se configuraron reglas de red para restringir el acceso únicamente al rango 
-de direcciones IP del \textit{backend} alojado en Azure App Service. Esto asegura que solo las solicitudes provenientes de la 
+de direcciones IP del backend alojado en Azure App Service. Esto asegura que solo las solicitudes provenientes de la 
 aplicación puedan acceder al modelo de lenguaje, lo que protege el servicio de accesos no autorizados.
 
-Una vez desplegado el recurso, fue necesario seleccionar y desplegar los modelos específicos requeridos para la funcionalidad del chatbot. 
+Una vez desplegado el recurso, fue necesario seleccionar y desplegar los modelos específicos requeridos por el chatbot. 
 En este caso, se optó por los siguientes modelos:
 
 \begin{itemize}
@@ -111,20 +108,20 @@ En este caso, se optó por los siguientes modelos:
 \end{itemize}
 
 Adicionalmente, es fundamental obtener el \textit{endpoint} y la \textit{key} del servicio, valores que se utilizan luego para la comunicación programática 
-con Azure OpenAI. Estos datos se almacenan en el \textit{backend} como variables de entorno para que el sistema pueda acceder al servicio de manera segura.
+con Azure OpenAI. Estos datos se almacenan en el backend como variables de entorno para que el sistema pueda acceder al servicio de manera segura.
 
 \begin{table}[h]
 	\centering
 	\caption[Configuración de Azure OpenAI]{Configuración de Azure OpenAI}
-	\begin{tabular}{l c}    
+	\begin{tabular}{l l}    
 		\toprule
 		\textbf{Configuración} 	 & \textbf{Detalles} 	\\
 		\midrule
 		Región              &	East US 				        \\		
 		Nivel de precios    & Standard S0				      \\
-		Reglas de Firewall  & Rango IP de App Service \\
-    Modelos desplegados	& gpt-4o				          \\
-            	          & text-embeddings-ada-002	\\
+		Reglas de firewall  & Rango IP de App Service \\
+    Modelos desplegados	& - gpt-4o				          \\
+            	          & - text-embeddings-ada-002	\\
     Credenciales	      & Endpoint y Key 		      \\
 		\bottomrule
 		\hline
@@ -134,43 +131,36 @@ con Azure OpenAI. Estos datos se almacenan en el \textit{backend} como variables
 
 \subsection{AI Search}
 
-Azure AI Search es el único servicio de búsqueda en la nube con capacidades de inteligencia artificial integradas 
+Azure AI Search es un servicio de búsqueda en la nube con capacidades de inteligencia artificial integradas 
 que enriquecen todo tipo de información con el fin de identificar y explorar fácilmente contenido relevante a escala.
 
-La tabla \ref{tab:config-ai-search}... Para el servicio de Azure AI Search, se seleccionó la región de East US y un nivel de precios Standard, el cual ofrece hasta 50 índices para el almacenamiento y la búsqueda de documentos. En cuanto a la escala, el servicio se configuró para utilizar una única search unit, con 1 réplica y 1 partición, lo cual es adecuado para el volumen de consultas esperado y los requisitos de rendimiento.
+La tabla \ref{tab:config-ai-search} presenta un resumen de las configuraciones realizadas. Se seleccionó la región de \textit{East US} y un nivel de precios 
+\textit{Standard}, que ofrece hasta 50 índices para el almacenamiento y la búsqueda de documentos. En cuanto a la escala, el servicio se configuró para 
+utilizar una sola unidad de búsqueda, lo cual es adecuado en principio para el volumen de consultas esperado y los requisitos de rendimiento.
 
-Se configuraron reglas de red restrictivas para mejorar la seguridad del servicio, permitiendo únicamente el acceso desde el rango de direcciones IP asociado al backend (App Service). Es fundamental obtener la key y la URI del servicio para integrarlos en las variables de entorno del backend, lo cual permite la interacción programática segura y eficiente con Azure AI Search.
+Al igual que con el servicio de Azure OpenAI, se configuraron reglas de red restrictivas para mejorar la seguridad del servicio, al permitir 
+únicamente el acceso desde el rango de direcciones IP asociado al backend. 
 
-Es importante destacar que no es necesario crear un índice manualmente en esta etapa, ya que el índice se generará automáticamente como parte del pipeline de despliegue.
+Aquí también es fundamental obtener la \textit{key} y la \textit{URI} del servicio para integrarlos en las variables de entorno del backend.
 
-Esta tabla resume los aspectos clave de la configuración de Azure AI Search, proporcionando una visión clara de los parámetros de infraestructura y de seguridad empleados.
+Es importante destacar que no es necesario crear un índice manualmente en esta etapa, ya que este será generado automáticamente como parte del pipeline de despliegue.
 
 \begin{table}[h]
 	\centering
-	\caption[Configuración de Azure OpenAI]{Configuración de Azure OpenAI}
-	\begin{tabular}{l c}    
+	\caption[Configuración de Azure AI Search]{Configuración de Azure AI Search}
+	\begin{tabular}{l l}    
 		\toprule
 		\textbf{Configuración} 	 & \textbf{Detalles} 	\\
 		\midrule
 		Región              &	East US 				        \\		
-		Nivel de precios    & Standard S0				      \\
-		Reglas de Firewall  & Rango IP de App Service \\
-    Modelos desplegados	& gpt-4o				          \\
-            	          & text-embeddings-ada-002	\\
-    Credenciales	      & Endpoint y Key 		      \\
+		Nivel de precios    & Standard				      \\
+		Reglas de firewall  & Rango IP de App Service \\
+    	Credenciales	      & URI y Key 		      \\
 		\bottomrule
 		\hline
 	\end{tabular}
-	\label{tab:config-openai}
+	\label{tab:config-ai-search}
 \end{table}
-
-Configuración	Detalles
-Región	East US
-Nivel de Precios	Standard (hasta 50 índices)
-Escalabilidad	1 search unit, 1 réplica, 1 partición
-Reglas de Red	Acceso restringido al rango de IP del App Service
-Credenciales Requeridas	Key y URI del servicio para configuración en el backend
-Creación de Índice	Automática mediante el pipeline de despliegue
 
 \subsection{App Service}
 
