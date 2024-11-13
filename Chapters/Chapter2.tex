@@ -6,39 +6,39 @@
 
 Este capítulo tiene como objetivo presentar las técnicas y herramientas clave utilizadas en el 
 desarrollo de este trabajo. Se analizan los enfoques fundamentales para el procesamiento de 
-lenguaje natural, junto con los modelos, \textit{frameworks} e infraestructura necesarios para 
+lenguaje natural, junto con los modelos, frameworks e infraestructura necesarios para 
 construir un sistema de recuperación de información eficiente y escalable. Este recorrido 
 técnico permite comprender los fundamentos sobre los que se apoya la solución implementada. 
 
 %---------------------------------------------------------------------------------------
 \section{Técnicas de procesamiento de lenguaje natural}
 
-El procesamiento de lenguaje natural (NLP) es un área de la inteligencia artificial que permite 
+El procesamiento de lenguaje natural (NLP) es un área de la inteligencia artificial que les permite 
 a las máquinas comprender e interpretar el lenguaje humano \citep{book:nlp}. Esto juega un papel esencial 
-al permitir que el chatbot interprete las consultas de los usuarios y localice la información relevante en los 
-documentos procesados. Las técnicas de NLP aplicadas permiten que el sistema entienda el 
-significado de las consultas, independientemente de variaciones lingüísticas o de sintaxis. Entre los 
-métodos de mayor importancia para este trabajo se encuentran los \textit{word embeddings} y
+para que un chatbot interprete las consultas de los usuarios y localice la información relevante en los 
+documentos procesados. Las técnicas de NLP aplicadas contribuyen a que el sistema entienda el 
+significado de las solicitudes, independientemente de variaciones lingüísticas o de sintaxis. Entre los 
+métodos de mayor importancia para este trabajo se encuentran los \textit{word embeddings} y los
 \textit{transformers}.
 
-\subsection{Word embeddings}
+\subsection{\textit{Word embeddings}}
 
 Los \textit{embeddings} son una poderosa técnica para transformar datos complejos en formas numéricas que 
-son fácilmente procesadas y analizadas por algoritmos de aprendizaje automático. Esta técnica permite 
+son fácilmente procesadas y analizadas por algoritmos de aprendizaje automático \citep{paper:embeddings}. Esta técnica permite 
 representar virtualmente cualquier tipo de dato como vectores, lo que posibilita su manipulación en tareas de 
 procesamiento de lenguaje natural.
 
 Sin embargo, no se trata solo de convertir las palabras en vectores. Es crucial preservar el significado original 
 de los datos para que las tareas realizadas en este espacio transformado mantengan la coherencia semántica. 
-Por ejemplo, al comparar dos frases, no queremos simplemente analizar las palabras que contienen, sino evaluar 
+Por ejemplo, al comparar dos frases, no solo se desea analizar las palabras que contienen, sino también evaluar 
 si ambas expresan un significado similar.
 
 Para conservar el significado, es necesario generar vectores donde las relaciones entre ellos sean representativas 
 del contenido. Para ello, se emplea un modelo de \textit{embeddings} pre-entrenado, que produce una representación compacta 
 de los datos mientras mantiene sus características semánticas. El objetivo es capturar el significado o las relaciones 
 semánticas entre los puntos de datos, de modo que los elementos similares se encuentren cercanos en el espacio vectorial y los disímiles estén alejados. 
-Por ejemplo, consideremos las palabras ``rey'' y ``reina''. Un \textit{embedding} puede mapear estas palabras en vectores de modo 
-que la diferencia entre ``rey' y ``reina'' sea similar a la diferencia entre ``hombre'' y ``mujer'', reflejando así las 
+Por ejemplo, considerando las palabras ``rey'' y ``reina'', un \textit{embedding} podría mapear estas palabras en vectores de modo 
+que la diferencia entre ``rey' y ``reina'' sea similar a la diferencia entre ``hombre'' y ``mujer'', y reflejar así las 
 relaciones semánticas subyacentes.
 
 En este trabajo, se ensayaron diferentes modelos de \textit{embeddings} de OpenAI, Google y Hugging Face, 
@@ -48,11 +48,10 @@ cuya evaluación y selección se detallan en el capítulo \ref{Chapter4}.
 
 La arquitectura de \textit{transformers} ha revolucionado el procesamiento de lenguaje natural al introducir un mecanismo de \textit{self-attention}, 
 que permite a un modelo evaluar la relevancia de cada palabra en una secuencia en relación con las demás \citep{paper:transformers}. Este enfoque 
-supera las limitaciones de modelos secuenciales tradicionales, ya que permite procesar palabras en paralelo y captar dependencias de largo alcance 
+supera las limitaciones de modelos secuenciales tradicionales, ya que es capaz de procesar palabras en paralelo y captar dependencias de largo alcance 
 en el texto. En lugar de analizar cada palabra en un orden específico, el mecanismo de \textit{self-attention} permite que el modelo ``preste atención'' 
-a las palabras más relevantes en el contexto de la frase, al asignar pesos a cada palabra según su importancia relativa en la oración.
-
-Gracias a esta capacidad, los \textit{transformers} pueden capturar relaciones contextuales complejas y matices semánticos entre las palabras, 
+a las palabras más relevantes en el contexto de la frase, al asignar pesos a cada una según su importancia relativa en la oración. Gracias a esta capacidad, 
+los \textit{transformers} pueden capturar relaciones contextuales complejas y matices semánticos entre las palabras, 
 lo que resulta fundamental para tareas como la generación de texto. Esta arquitectura ha hecho posible que los modelos comprendan y generen 
 lenguaje natural de una forma mucho más cercana a la comprensión humana. Esta técnica 
 ha sido fundamental en el desarrollo de los modelos grandes de lenguaje, que se introducen a continuación.
@@ -78,9 +77,9 @@ algunos de los modelos más relevantes en la actualidad \citep{website:lifearchi
 		\textbf{Modelo} 	 & \textbf{Creador} 	& \textbf{Año de publicación}  & \textbf{Cant. de parámetros (aprox.)}\\
 		\midrule
 		GPT-4o               & OpenAI 				& 2024                         & 200 mil millones\\		
-		Gemini 1.5      	 & Google				& 2024                         & 1.5 billones\\
+		Gemini 1.5      	 & Google				& 2024                         & 1,5 billones\\
 		LLaMa 3         	 & Meta				    & 2024                         & 70 mil millones\\
-        GPT-4         	     & OpenAI				& 2023                         & 1.76 billones\\
+        GPT-4         	     & OpenAI				& 2023                         & 1,76 billones\\
         LLaMa 2         	 & Meta				    & 2023                         & 70 mil millones\\
         Mistral-7B         	 & Mistral AI		    & 2023                         & 7 mil millones\\
         BLOOM         	     & BigScience		    & 2022                         & 176 mil millones\\
@@ -106,19 +105,19 @@ modelos tradicionales:
 	\item Los LLM pueden adaptarse a nuevas tareas simplemente utilizando ejemplos en el \textit{prompt}, 
 	sin necesidad de modificar sus parámetros o re-entrenar. Esto contrasta con los modelos tradicionales, 
 	que requieren grandes conjuntos de datos etiquetados y re-entrenarse cada vez que se incorporan nuevas tareas.
-	\item Los LLM comprenden instrucciones en lenguaje natural, lo que les permite seguir instrucciones complejas e 
+	\item Comprenden instrucciones en lenguaje natural, lo que les permite seguir indicaciones complejas e 
 	incluso inferir reglas implícitas a partir de ejemplos. Los modelos tradicionales, en cambio, suelen necesitar 
 	formatos de entrada específicos y siguen reglas programadas explícitamente, sin capacidad para inferir patrones 
 	nuevos en tiempo real.
+	\item Mantienen la coherencia en conversaciones largas y son capaces de recordar información dada en 
+	partes previas del diálogo. Los modelos tradicionales procesan cada entrada de manera independiente y no pueden 
+	conservar el estado conversacional.
+	\item Permiten una interacción bidireccional, donde pueden solicitar aclaraciones y ajustar sus respuestas 
+	en función del \textit{feedback} recibido. Los modelos tradicionales, en cambio, ofrecen una interacción unidireccional
+	y no manejan \textit{feedback} en tiempo real.
 	\item Un solo LLM es capaz de realizar múltiples tareas sin configuración adicional y de adaptar su salida según 
 	el contexto. Por el contrario, los modelos tradicionales están diseñados para una tarea específica, por lo que 
 	se requiere un modelo separado para cada tarea.
-	\item Los LLM mantienen la coherencia en conversaciones largas, siendo capaces de recordar información dada en 
-	partes previas del diálogo. Los modelos tradicionales procesan cada entrada de manera independiente y no pueden 
-	conservar el estado conversacional.
-	\item Los LLM permiten una interacción bidireccional, donde pueden solicitar aclaraciones y ajustar sus respuestas 
-	en función del \textit{feedback} recibido. Los modelos tradicionales, en cambio, ofrecen una interacción unidireccional
-	y no manejan \textit{feedback} en tiempo real.
 \end{itemize}
 
 %----------------------------------------------------------------------------------------
@@ -130,14 +129,14 @@ con la que fueron entrenados. Si bien esta información es sumamente vasta, no a
 posibles, y no contempla contenido no disponible en fuentes públicas.
 
 Para abordar esta limitación, los LLM pueden adaptarse mediante la técnica conocida como recuperación aumentada por 
-generación (RAG), integrando fuentes de datos especializadas que mejoran su precisión 
+generación (RAG) \citep{paper:rag-1}, que integra fuentes de datos especializadas que mejoran su precisión 
 en contextos concretos, como el entorno empresarial. De esta manera, los LLM pueden aprovechar su capacidad de 
 comprensión profunda del lenguaje, pero también acceder a información precisa y actualizada de documentos específicos.
 
 Básicamente, esta técnica consta de dos fases principales: primero, se realiza una búsqueda entre los documentos
 provistos y se seleccionan fragmentos que sean relevantes para la consulta del usuario. Luego, un modelo LLM
 utiliza esa información para construir una respuesta contextualizada. En la figura \ref{fig:rag} se ilustra
-un diagrama básico de funcionamiento.
+un diagrama básico de su funcionamiento.
 
 \vspace{3mm}
 
@@ -154,7 +153,7 @@ entre las capacidades generales del modelo y la especificidad requerida en el co
 %----------------------------------------------------------------------------------------
 \section{Bases de datos vectoriales}
 
-Una base de datos de vectorial es una base de datos diseñada para almacenar y gestionar \textit{embeddings}. La misma
+Una base de datos de vectorial \citep{article:vector-db} es una base de datos diseñada para almacenar y gestionar \textit{embeddings}. Esta
 cumple un papel fundamental en la etapa de recuperación de información.
 
 A diferencia de las bases de datos tradicionales, en las que las consultas suelen coincidir exactamente con los valores almacenados, 
@@ -170,22 +169,22 @@ Los resultados de estos ensayos se describen en el capítulo \ref{Chapter4}.
 %----------------------------------------------------------------------------------------
 \section{Frameworks utilizados}
 
-En el desarrollo de este trabajo se utilizaron una serie \textit{frameworks} que facilitaron la implementación de 
+En el desarrollo de este trabajo se utilizaron una serie frameworks que facilitaron la implementación de 
 cada parte del sistema. A continuación, se detallan sus principales características y su rol específico en el producto final.
 
 \begin{itemize}
-	\item \textbf{LangChain:} este \textit{framework} fue fundamental para la construcción del sistema RAG, ya que permite una gestión 
+	\item LangChain: este framework fue fundamental para la construcción del sistema RAG, ya que permite una gestión 
 	eficiente de flujos de trabajo con modelos de lenguaje. LangChain facilita la integración de modelos LLM con fuentes de datos externas, 
 	y además ofrece herramientas para diseñar flujos complejos 
 	que manejan las consultas del usuario, el proceso de recuperación y la generación de respuestas \citep{website:langchain}.
-	\item \textbf{FastAPI:} se utilizó para construir la API que conecta los componentes del sistema y gestiona las solicitudes del usuario. 
-	Este \textit{framework}, reconocido por su alto rendimiento y facilidad de uso, permitió desarrollar una API eficiente y escalable que procesa 
+	\item FastAPI: se utilizó para construir la API que conecta los componentes del sistema y gestiona las solicitudes del usuario. 
+	Este framework, reconocido por su alto rendimiento y facilidad de uso, permitió desarrollar una API eficiente y escalable que procesa 
 	las consultas en tiempo real. FastAPI facilita el manejo de solicitudes asíncronas y permite definir de manera clara los puntos 
-	de conexión de la API, asegurando que las interacciones entre el \textit{frontend} y el \textit{backend} se 
+	de conexión de la API, asegurando que las interacciones entre el frontend y el backend se 
 	realicen de forma fluida y rápida \citep{website:fastapi}.
-	\item \textbf{NextUI:} es un \textit{framework} de diseño de interfaces de usuario 
+	\item NextUI: es un framework de diseño de interfaces de usuario 
 	basado en React que permite construir interfaces modernas y responsivas. NextUI facilitó la creación de una interfaz intuitiva 
-	y fácil de usar, que permite a los usuarios interactuar con el chatbot de manera fluida. Este \textit{framework} ofrece una variedad de 
+	y fácil de usar, que permite a los usuarios interactuar con el chatbot de manera fluida. Este framework ofrece una variedad de 
 	componentes pre-construidos y altamente personalizables, lo que ayudó a reducir el tiempo de desarrollo de la interfaz y asegurar 
 	una experiencia de usuario satisfactoria \citep{website:nextui}.
 \end{itemize}
@@ -195,20 +194,20 @@ cada parte del sistema. A continuación, se detallan sus principales caracterís
 
 En este trabajo se empleó Microsoft Azure \citep{website:azure} como la plataforma principal de infraestructura en la nube, seleccionada por su robustez y 
 variedad de servicios orientados a aplicaciones de inteligencia artificial. Azure ofrece soluciones 
-escalables y seguras para gestionar datos y modelos, facilitando la integración de distintos recursos en un entorno controlado y eficiente.
+escalables y seguras para gestionar datos y modelos, lo que facilita la integración de distintos recursos en un entorno controlado y eficiente.
 
 Los recursos específicos de Azure utilizados incluyen:
 
 \begin{itemize}
-	\item \textbf{Azure OpenAI:} este recurso se utilizó para desplegar el modelo de lenguaje LLM y el modelo de \textit{embeddings}, 
+	\item Azure OpenAI: este recurso se utilizó para desplegar el modelo de lenguaje LLM y el modelo de \textit{embeddings}, 
 	lo que provee la capacidad de procesamiento de lenguaje natural avanzada requerida por el sistema \citep{website:azure-openai}.
-	\item \textbf{Azure AI Search:} utilizado como base de datos vectorial, este servicio permite almacenar y recuperar \textit{embeddings} 
+	\item Azure AI Search: utilizado como base de datos vectorial, este servicio permite almacenar y recuperar \textit{embeddings} 
 	mediante búsquedas de similitud \citep{website:ai-search}.
-	\item \textbf{Azure App Service:} empleado para hospedar el \textit{backend} del chatbot, este servicio garantiza un entorno seguro y 
+	\item Azure App Service: empleado para hospedar el backend del chatbot, este servicio garantiza un entorno seguro y 
 	escalable para la ejecución de la API y la gestión de consultas de los usuarios \citep{website:app-service}.
-	\item \textbf{Azure Static Web Apps:} utilizado para hospedar el \textit{frontend} del chatbot, proporciona un despliegue 
+	\item Azure Static Web Apps: utilizado para hospedar el frontend del chatbot, proporciona un despliegue 
 	rápido y eficiente de la interfaz de usuario y puede ser accedido por los empleados desde cualquier ubicación \citep{website:static-web-app}.
 \end{itemize}
 
 Además, se implementó GitHub Actions \citep{website:github-actions} como \textit{pipeline} de integración y despliegue continuo, no solo para publicar 
-actualizaciones del \textit{backend} y el \textit{frontend}, sino también para automatizar la actualización del contenido de la base de datos.
+actualizaciones del backend y el frontend, sino también para automatizar la actualización del contenido de la base de datos.
