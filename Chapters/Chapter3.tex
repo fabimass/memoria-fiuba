@@ -115,14 +115,14 @@ con Azure OpenAI. Estos datos se almacenan en el backend como variables de entor
 	\caption[Configuración de Azure OpenAI]{Configuración de Azure OpenAI}
 	\begin{tabular}{l l}    
 		\toprule
-		\textbf{Configuración} 	 & \textbf{Detalles} 	\\
+		\textbf{Configuración} 	 & \textbf{Detalles} 	     \\
 		\midrule
-		Región              &	East US 				        \\		
-		Nivel de precios    & Standard S0				      \\
-		Reglas de firewall  & Rango IP de App Service \\
-    Modelos desplegados	& - gpt-4o				          \\
-            	          & - text-embeddings-ada-002	\\
-    Credenciales	      & Endpoint y Key 		      \\
+		Región                   &	East US 				 \\		
+		Nivel de precios         & Standard S0				 \\
+		Reglas de firewall       & Rango IP de App Service   \\
+        Modelos desplegados	     & - gpt-4o				     \\
+            	                 & - text-embeddings-ada-002 \\
+        Credenciales	         & Endpoint y key 		     \\
 		\bottomrule
 		\hline
 	\end{tabular}
@@ -141,7 +141,7 @@ utilizar una sola unidad de búsqueda, lo cual es adecuado en principio para el 
 Al igual que con el servicio de Azure OpenAI, se configuraron reglas de red restrictivas para mejorar la seguridad del servicio, al permitir 
 únicamente el acceso desde el rango de direcciones IP asociado al backend. 
 
-Aquí también es fundamental obtener la \textit{key} y la \textit{URI} del servicio para integrarlos en las variables de entorno del backend.
+Aquí también es fundamental obtener la \textit{key} y el \textit{endpoint} del servicio para integrarlos en las variables de entorno del backend.
 
 Es importante destacar que no es necesario crear un índice manualmente en esta etapa, ya que este será generado automáticamente como parte del pipeline de despliegue.
 
@@ -150,12 +150,12 @@ Es importante destacar que no es necesario crear un índice manualmente en esta 
 	\caption[Configuración de Azure AI Search]{Configuración de Azure AI Search}
 	\begin{tabular}{l l}    
 		\toprule
-		\textbf{Configuración} 	 & \textbf{Detalles} 	\\
+		\textbf{Configuración} 	 & \textbf{Detalles} 	   \\
 		\midrule
-		Región              &	East US 				        \\		
-		Nivel de precios    & Standard				      \\
-		Reglas de firewall  & Rango IP de App Service \\
-    	Credenciales	      & URI y Key 		      \\
+		Región                   &	East US 			   \\		
+		Nivel de precios         & Standard				   \\
+		Reglas de firewall       & Rango IP de App Service \\
+    	Credenciales	         & Endpoint y key 		   \\
 		\bottomrule
 		\hline
 	\end{tabular}
@@ -164,109 +164,123 @@ Es importante destacar que no es necesario crear un índice manualmente en esta 
 
 \subsection{App Service}
 
-En esta plataforma completamente administrada, uno puede alojar una aplicación avanzada en la nube sin necesidad de administrar la infraestructura.
+Este servicio ofrece una plataforma completamente administrada donde es posible alojar una aplicación avanzada en la nube 
+sin necesidad de manejar la infraestructura asociada. En este caso se utilizó para desplegar el backend del chatbot.
 
-Para alojar el backend del chatbot, se configura un App Service Plan con el SKU Basic B3, el cual proporciona 4 vCPU, 7 GB de RAM, 10 GB de almacenamiento remoto, y permite escalar hasta 3 instancias en caso de ser necesario. Como entorno de ejecución, se selecciona Python 3.10, y la región elegida es East US. Para optimizar los costos, se deshabilita la opción de zone redundancy.
+La tabla \ref{tab:config-app-service} resume la configuración principal del servicio. En primer lugar, se seleccionó un App Service Plan de categoría \textit{Basic B3}, que proporciona un poder de procesamiento de 
+4 vCPU, 7 GB de memoria RAM, 10 GB de almacenamiento remoto, y permite escalar hasta 3 instancias en caso de ser necesario. 
+Como entorno de ejecución, se configuró Python 3.10, mientras que como región se optó una vez más por \textit{East US}. Con el 
+fin de optimizar los costos, se deshabilita la opción de redundancia zonal.
 
-Para que la aplicación funcione correctamente, es esencial configurar varias variables de entorno en el App Service. Estas variables incluyen las claves y los puntos de conexión de los servicios de Azure que se utilizan, así como los nombres de índices y modelos específicos. La siguiente tabla muestra las variables de entorno requeridas:
-
-\begin{table}[h]
-	\centering
-	\caption[Configuración de Azure OpenAI]{Configuración de Azure OpenAI}
-	\begin{tabular}{l c}    
-		\toprule
-		\textbf{Configuración} 	 & \textbf{Detalles} 	\\
-		\midrule
-		Región              &	East US 				        \\		
-		Nivel de precios    & Standard S0				      \\
-		Reglas de Firewall  & Rango IP de App Service \\
-    Modelos desplegados	& gpt-4o				          \\
-            	          & text-embeddings-ada-002	\\
-    Credenciales	      & Endpoint y Key 		      \\
-		\bottomrule
-		\hline
-	\end{tabular}
-	\label{tab:config-openai}
-\end{table}
-
-Variable de Entorno	Descripción
-AZURE OPENAI API KEY	Clave de acceso para el servicio de Azure OpenAI
-AZURE OPENAI ENDPOINT	Endpoint del servicio de Azure OpenAI
-AZURE SEARCH KEY	Clave de acceso para el servicio de Azure AI Search
-AZURE SEARCH URI	URI del servicio de Azure AI Search
-AZURE STORAGE CONNECTION STRING	Cadena de conexión para el almacenamiento de Azure
-DB INDEX	Índice de la base de datos a utilizar
-EMBEDDINGS MODEL	Modelo de embeddings a utilizar para el procesamiento
-
-Para asegurar un monitoreo efectivo de la aplicación, se habilita la integración con Application Insights, permitiendo un seguimiento detallado de las métricas de rendimiento y uso. Adicionalmente, se activa la opción de Application Logging, de modo que los logs de la aplicación puedan ser visualizados directamente desde la terminal del App Service, facilitando la depuración y la supervisión continua.
-
-Esta tabla resume la configuración principal del App Service, destacando los recursos asignados, las configuraciones de seguridad y monitoreo, así como los elementos clave necesarios para su correcta operación en el entorno de Azure.
+Para que la aplicación funcione correctamente, es esencial configurar un conjunto variables de entorno, que se listan en la tabla \ref{tab:config-env}. Estas 
+variables incluyen las claves y los puntos de conexión de los servicios de Azure que interactúan con el backend. 
 
 \begin{table}[h]
 	\centering
-	\caption[Configuración de Azure OpenAI]{Configuración de Azure OpenAI}
-	\begin{tabular}{l c}    
+	\caption[Variables de entorno]{Variables de entorno}
+	\begin{tabular}{l l}    
 		\toprule
-		\textbf{Configuración} 	 & \textbf{Detalles} 	\\
+		\textbf{Variable de entorno}  & \textbf{Descripción} 	                          \\
 		\midrule
-		Región              &	East US 				        \\		
-		Nivel de precios    & Standard S0				      \\
-		Reglas de Firewall  & Rango IP de App Service \\
-    Modelos desplegados	& gpt-4o				          \\
-            	          & text-embeddings-ada-002	\\
-    Credenciales	      & Endpoint y Key 		      \\
+		openai\_api\_key              &	Clave de acceso del servicio de Azure OpenAI 	  \\		
+		openai\_endpoint              & Endpoint del servicio de Azure OpenAI			  \\
+		search\_key                   & Clave de acceso del servicio de Azure AI Search   \\
+		search\_endpoint	          & Endpoint del servicio de Azure AI Search		  \\
+        storage\_connection\_string   & Connection string de la cuenta de almacenamiento  \\
+		db\_index	                  & Índice de la base de datos a utilizar		      \\
 		\bottomrule
 		\hline
 	\end{tabular}
-	\label{tab:config-openai}
+	\label{tab:config-env}
 \end{table}
 
-Configuración	Detalles
-SKU del App Service Plan	Basic B3
-Recursos del Plan	4 vCPU, 7 GB RAM, 10 GB de almacenamiento remoto
-Escalabilidad	Hasta 3 instancias
-Runtime	Python 3.10
-Región	East US
-Zone Redundancy	Deshabilitada
-Monitoreo	Integración con Application Insights
-Logging	Application Logging habilitado
+Para asegurar un monitoreo efectivo de la aplicación, se habilitó la integración con Application Insights, lo que permite un 
+seguimiento detallado de las métricas de rendimiento y de uso. Adicionalmente, se configuró la opción de \textit{application logging}, 
+de modo que los logs de la aplicación fueran visualizados directamente desde la terminal del App Service, facilitando la depuración 
+y la supervisión continua.
+
+\begin{table}[h]
+	\centering
+	\caption[Configuración de Azure App Service]{Configuración de Azure App Service}
+	\begin{tabular}{l l}    
+		\toprule
+		\textbf{Configuración} & \textbf{Detalles} 	\\
+		\midrule
+		App Service Plan       & Basic B3           \\
+		Runtime                & Python 3.10        \\
+		Región                 & East US 			\\		
+		Zone redundancy        & Deshabilitada		\\
+		Application Insights   & Habilitado         \\
+		Application logging	   & Filesystem			\\
+		\bottomrule
+		\hline
+	\end{tabular}
+	\label{tab:config-app-service}
+\end{table}
 
 \subsection{Static Web App}
 
-Con Static Web Apps, el contenido estático como HTML, CSS y JavaScript e imágenes, se distribuye globalmente desde puntos de todo el mundo en lugar de un servidor web tradicional, por lo que los archivos están más cerca de los usuarios finales.
+Al utilizar este servicio, el contenido estático como HTML, CSS, JavaScript e imágenes, se distribuye globalmente desde diversos puntos 
+alrededor del mundo a diferencia de un servidor web tradicional, por lo que los archivos se encuentran físicamente más cerca de los usuarios finales,
+sin importar su ubicación.
 
-El recurso de Static Web App en Azure es sencillo de configurar, ya que solo requiere seleccionar un SKU y una forma de despliegue. En este caso, se ha optado por el SKU Standard, que proporciona características adicionales y soporte global. Como método de despliegue, se utiliza GitHub, lo cual permite una integración directa con el repositorio y facilita el control de versiones y el despliegue continuo de la aplicación.
+La tabla \ref{tab:config-static-webapp} resume los aspectos clave de la Static Web App. Este recurso es sencillo de configurar, ya que solo requiere seleccionar un modelo de precios. En este caso, se optó por 
+la versión \textit{Standard}. A diferencia de otros servicios en Azure, las Static Web Apps se despliegan globalmente, por lo que no es necesario especificar una región. 
+Además, no se requieren variables de entorno para este recurso, ya que todas las conexiones con otros servicios son manejadas exclusivamente 
+por el backend, simplificando la configuración.
 
-A diferencia de otros servicios en Azure, las Static Web Apps se despliegan globalmente, por lo que no es necesario especificar una región. Además, no se requieren variables de entorno para este recurso, ya que todas las conexiones a otros servicios (como el backend y las APIs) son manejadas exclusivamente por el backend, simplificando la configuración.
+Es importante obtener el \textit{deployment token} asociado al recurso, que será necesario más adelante para configurar el pipeline de despliegue automático, 
+permitiendo la autenticación y el despliegue seguro desde GitHub.
 
-Es importante obtener el deployment token de la Static Web App, ya que este token será necesario más adelante para configurar el pipeline de despliegue automático, permitiendo la autenticación y el despliegue seguro desde GitHub.
-
-Configuración	Detalles
-SKU	Standard
-Método de Despliegue	GitHub
-Región	Despliegue global
-Variables de Entorno	No aplicable
-Token de Despliegue	Requerido para configurar el pipeline
-
-Esta tabla resume los aspectos clave de la Static Web App
+\begin{table}[h]
+	\centering
+	\caption[Configuración de Azure App Service]{Configuración de Azure App Service}
+	\begin{tabular}{l l}    
+		\toprule
+		\textbf{Configuración} 	& \textbf{Detalles} \\
+		\midrule
+		Nivel de precios        & Standard          \\
+		Región                  & Global 			\\		
+		Variables de entorno    & No aplica			\\
+		Credenciales            & Deployment token  \\
+		\bottomrule
+		\hline
+	\end{tabular}
+	\label{tab:config-static-webapp}
+\end{table}
 
 \subsection{Table Storage}
 
-Para implementar el recurso de Table Storage, primero se desplegó una Storage Account en la región East US, manteniendo la consistencia con los demás recursos del sistema. Se seleccionó Tables como servicio principal y se configuró una performance de tipo Standard, adecuada para las necesidades de la aplicación.
+Azure Table Storage es un servicio que almacena datos estructurados no relacionales (también conocidos como datos NoSQL) en la nube, que almacena claves/atributos 
+con un diseño sin esquemas. En el contexto de este trabajo se utilizó para almacenar el feedback de los usuarios acerca de las respuestas provistas por el chatbot.
 
-En cuanto a la redundancia de los datos, se eligió la opción de Almacenamiento Localmente Redundante (Locally-redundant storage), una alternativa rentable que asegura que los datos estén replicados dentro de un único centro de datos en la misma región, reduciendo costos sin comprometer la disponibilidad básica.
+La tabla \ref{tab:config-table-storage} resume la configuración principal de este recurso. Primeramente, fue necesario desplegar una Storage Account en la región \textit{East US}, para así mantener la consistencia con los demás 
+recursos del sistema. Se seleccionó una performance de tipo \textit{Standard}, adecuada para las necesidades de la aplicación.
 
-Una vez que la cuenta de almacenamiento fue desplegada, se procedió a crear la tabla FeedbackTable, que servirá para almacenar los comentarios y opiniones de los usuarios recopilados a través del sistema. Es importante obtener la connection string de la Storage Account, ya que será necesaria para conectar la aplicación con esta tabla y permitir el acceso programático.
+En cuanto a la redundancia de los datos, se eligió la oferta de redundancia local, una alternativa rentable que asegura que los datos 
+estén replicados dentro de un único centro de datos en la misma región, reduciendo costos sin comprometer la disponibilidad básica.
 
-Configuración	Detalles
-Región	East US
-Servicio Principal	Tables
-Performance	Standard
-Redundancia	Locally-redundant storage
-Nombre de la Tabla	FeedbackTable
-Connection String	Necesaria para conectar la aplicación
+Una vez que la cuenta de almacenamiento fue desplegada, se procedió a crear la tabla que almacenará los resultados 
+recopilados a través del sistema. Es importante obtener la \textit{connection string} asociada al recurso, ya que será 
+necesaria para conectar la aplicación con la tabla y permitir el acceso programático. 
 
-Esta tabla resume los aspectos clave de la configuración de Table Storage
+\begin{table}[h]
+	\centering
+	\caption[Configuración de Azure Table Storage]{Configuración de Azure Table Storage}
+	\begin{tabular}{l l}    
+		\toprule
+		\textbf{Configuración} 	 & \textbf{Detalles} 	      \\
+		\midrule
+		Región                   &	East US 				  \\		
+		Performance	             &  Standard				  \\
+		Redundancia	             &  Locally-redundant storage \\
+		Credenciales             &  Connection string         \\
+		Nombre de la tabla       &	FeedbackTable             \\
+		\bottomrule
+		\hline
+	\end{tabular}
+	\label{tab:config-table-storage}
+\end{table}
 
 %---------------------------------------------------------------------------------------
 \section{Procesamiento de los documentos}
