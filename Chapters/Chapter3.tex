@@ -22,7 +22,7 @@
   %frame=single,	                 % adds a frame around the code
   keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
   keywordstyle=\color{blue},       % keyword style
-  language=[ANSI]C,                % the language of the code
+  language=python,                % the language of the code
   %otherkeywords={*,...},          % if you want to add more keywords to the set
   numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
   numbersep=5pt,                   % how far the line-numbers are from the code
@@ -284,6 +284,131 @@ necesaria para conectar la aplicación con la tabla y permitir el acceso program
 
 %---------------------------------------------------------------------------------------
 \section{Procesamiento de los documentos}
+
+La finalidad del procesamiento de documentos es transformar archivos de texto y PDF en un formato que facilite su búsqueda y análisis mediante 
+herramientas de inteligencia artificial. Este flujo de trabajo incluye el uso de modelos de \textit{embeddings} para convertir el texto en 
+representaciones vectoriales, y su posterior inserción en una base de datos vectorial. Para ello, se desarrolló un script en Python que asegura 
+un manejo eficiente de grandes volúmenes de datos, al implementar mecanismos para distribuir las solicitudes a la API de Azure Search y evitar 
+superar sus límites de tasa de uso, además de optimizar el almacenamiento en el índice de búsqueda.
+
+\subsection{Importación de bibliotecas y configuración inicial}
+
+El script comienza con la importación de las bibliotecas necesarias para realizar el procesamiento de documentos. Se utilizan paquetes específicos 
+que integran funciones avanzadas para trabajar con \textit{embeddings}, carga de documentos, y búsqueda por similitud. El módulo \textit{nltk} es esencial 
+para el procesamiento de texto en lenguaje natural, al proporcionar herramientas de tokenización y etiquetado de texto.
+
+\begin{lstlisting}[label=cod:update-db-1,caption=Importación de bibliotecas y configuración inicial.]
+	import os
+	import requests
+	from langchain_openai import AzureOpenAIEmbeddings
+	from langchain_google_genai import GoogleGenerativeAIEmbeddings
+	from langchain_community.vectorstores.azuresearch import AzureSearch
+	from langchain_text_splitters import RecursiveCharacterTextSplitter
+	from langchain_community.document_loaders import UnstructuredMarkdownLoader, PyPDFLoader
+	import nltk
+	import time
+
+	nltk.download('punkt_tab')
+	nltk.download('averaged_perceptron_tagger_eng')
+\end{lstlisting}
+
+\subsection{Configuración del índice de búsqueda}
+
+Antes de insertar documentos en la base de datos, es necesario realizar una limpieza para eliminar cualquier dato previo. La función 
+\textit{delete\_index} se encarga de esta tarea, enviando una solicitud de tipo \textit{DELETE} a la API de Azure Search para borrar todos 
+los documentos de un índice específico.
+
+\begin{lstlisting}[label=cod:update-db-2,caption=Configuración del índice de búsqueda.]
+	def delete_index(azure_search_endpoint, azure_search_key, index_name):
+		url = f"{azure_search_endpoint}/indexes('{index_name}')?api-version=2023-11-01"
+		headers = {
+			"Content-Type": "application/json",
+			"api-key": f"{azure_search_key}"
+		}
+		response = requests.delete(url, headers=headers)
+		if response.status_code == 204:
+			print("All documents deleted successfully.")
+		else:
+			print(f"Failed to delete documents. Status code: {response.status_code}, Response: {response.text}")
+\end{lstlisting}
+
+Este paso es esencial para asegurar que los datos insertados sean consistentes con los documentos procesados más recientemente, evitando 
+duplicación de información y permitiendo un índice limpio.
+
+\subsection{Configuración del modelo de \textit{embeddings}}
+
+La selección del modelo de \textit{embeddings} depende de una variable de entorno. El script soporta tanto modelos de Azure OpenAI como de Google. 
+Según el modelo especificado, se inicializa una instancia de \textit{AzureOpenAIEmbeddings} o \textit{GoogleGenerativeAIEmbeddings}.
+
+\begin{lstlisting}[label=cod:update-db-3,caption=Configuración del modelo de \textit{embeddings}.]
+	if os.getenv("EMBEDDINGS_MODEL") == "openai":
+		embeddings = AzureOpenAIEmbeddings(model="ada-002", openai_api_version="2024-06-01")
+	elif os.getenv("EMBEDDINGS_MODEL") == "google":    
+		embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+	else:
+		embeddings = AzureOpenAIEmbeddings(model="ada-002", openai_api_version="2024-06-01")
+\end{lstlisting}
+
+\subsection{Conexión con la base de datos}
+
+Una vez configurado el modelo de \textit{embeddings}, el siguiente paso es instanciar una conexión con el índice de Azure Search. 
+Esto permite la interacción directa con el índice y la inserción de documentos procesados.
+
+\begin{lstlisting}[label=cod:update-db-4,caption=Conexión con la base de datos.]
+	azure_search = AzureSearch(
+		azure_search_endpoint=os.getenv("AZURE_SEARCH_URI"),
+		azure_search_key=os.getenv("AZURE_SEARCH_KEY"),
+		index_name=index_name,
+		embedding_function=embeddings.embed_query
+	)
+\end{lstlisting}
+
+Este objeto se utiliza posteriormente en el flujo para agregar documentos en el índice de búsqueda, una vez que hayan sido procesados y transformados en \textit{embeddings}.
+
+\subsection{Divisor de texto}
+
+Para manejar eficientemente documentos extensos, el script utiliza un divisor de texto para separar el contenido en fragmentos manejables 
+de hasta 512 caracteres con un solapamiento de 64 caracteres entre fragmentos consecutivos. Este solapamiento asegura la continuidad del
+contexto en los fragmentos resultantes.
+
+El script busca archivos en la carpeta \textit{knowledge-base} y aplica distintos \textit{loaders} según el tipo de archivo (PDF o Markdown). Luego, 
+cada archivo se divide en fragmentos utilizando el divisor de texto configurado previamente.
+
+\begin{lstlisting}[label=cod:update-db-5,caption=Divisor de texto.]
+	splitter = RecursiveCharacterTextSplitter(chunk_size=512, chunk_overlap=64)
+
+	for root, dirs, files in os.walk('knowledge-base'):
+    for file in files:
+        file_path = os.path.join(root, file)
+        if file.endswith('.pdf'):
+            data_loader = PyPDFLoader(file_path)
+        elif file.endswith('.md'):
+            data_loader = UnstructuredMarkdownLoader(file_path)
+        file_chunks = data_loader.load_and_split(text_splitter=splitter)
+        print(f"{file_path} splitted into {len(file_chunks)} chunks")
+\end{lstlisting}
+
+\subsection{Inserción en lotes}
+
+Para evitar alcanzar el límite de uso de la API, los fragmentos se insertan en el índice en lotes pequeños, con una demora entre cada lote. 
+La función \textit{batch\_insert\_chunks} controla esta inserción en lotes, estableciendo un tamaño de lote y un tiempo de espera entre lotes.
+
+\begin{lstlisting}[label=cod:update-db-6,caption=Inserción en lotes.]
+	def batch_insert_chunks(chunks,batch_size=5,delay_between_batches=3):
+    batch_count=0
+    inserted_ids = []
+    for i in range(0, len(chunks), batch_size):
+        batch = chunks[i:i+batch_size]
+        batch_count += 1
+        inserted_ids_batch = azure_search.add_documents(batch)
+        inserted_ids.extend(inserted_ids_batch)
+        print(f"Inserted batch #{batch_count} ({len(inserted_ids_batch)} documents)")
+        time.sleep(delay_between_batches)
+    return inserted_ids
+\end{lstlisting}
+
+La inserción en lotes es un aspecto clave del diseño, ya que permite manejar eficientemente grandes volúmenes de datos sin interrumpir
+ el flujo debido a límites de solicitud.
 
 %---------------------------------------------------------------------------------------
 \section{Lógica de comunicación entre el usuario y el modelo}
