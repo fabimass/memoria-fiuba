@@ -177,7 +177,7 @@ variables incluyen las claves y los puntos de conexión de los servicios de Azur
 
 \begin{table}[h]
 	\centering
-	\caption[Variables de entorno]{Variables de entorno}
+	\caption[Variables de entorno en el backend]{Variables de entorno en el backend}
 	\begin{tabular}{l l}    
 		\toprule
 		\textbf{Variable de entorno}  & \textbf{Descripción} 	                          \\
@@ -226,8 +226,8 @@ sin importar su ubicación.
 
 La tabla \ref{tab:config-static-webapp} resume los aspectos clave de la Static Web App. Este recurso es sencillo de configurar, ya que solo requiere seleccionar un modelo de precios. En este caso, se optó por 
 la versión \textit{Standard}. A diferencia de otros servicios en Azure, las Static Web Apps se despliegan globalmente, por lo que no es necesario especificar una región. 
-Además, no se requieren variables de entorno para este recurso, ya que todas las conexiones con otros servicios son manejadas exclusivamente 
-por el backend, simplificando la configuración.
+Además, ya que todas las conexiones con otros servicios son manejadas exclusivamente por el backend, la única variable de entorno requerida 
+es la URL de la API, lo que simplifica la configuración.
 
 Es importante obtener el \textit{deployment token} asociado al recurso, que será necesario más adelante para configurar el pipeline de despliegue automático, 
 permitiendo la autenticación y el despliegue seguro desde GitHub.
@@ -241,7 +241,7 @@ permitiendo la autenticación y el despliegue seguro desde GitHub.
 		\midrule
 		Nivel de precios        & Standard          \\
 		Región                  & Global 			\\		
-		Variables de entorno    & No aplica			\\
+		Variables de entorno    & URL del backend	\\
 		Credenciales            & Deployment token  \\
 		\bottomrule
 		\hline
@@ -408,10 +408,140 @@ La función \textit{batch\_insert\_chunks} controla esta inserción en lotes, es
 \end{lstlisting}
 
 La inserción en lotes es un aspecto clave del diseño, ya que permite manejar eficientemente grandes volúmenes de datos sin interrumpir
- el flujo debido a límites de solicitud.
+el flujo debido a límites de solicitud.
+
+\vspace{8mm}
 
 %---------------------------------------------------------------------------------------
-\section{Lógica de comunicación entre el usuario y el modelo}
+\section{Lógica de generación aumentada por recuperación}
+
+El sistema RAG se compone de dos etapas principales:
+
+\begin{itemize}
+	\item Fase de recuperación: Se realiza una búsqueda semántica en la base de datos vectorial para identificar 
+	los fragmentos más relevantes a partir de una consulta.
+	\item Fase de generación: Los fragmentos recuperados se combinan con la consulta del usuario y se utilizan 
+	como contexto para un modelo de lenguaje grande (LLM), que genera una respuesta contextualizada.
+\end{itemize}
+
+Este enfoque aprovecha lo mejor de ambos mundos: la precisión en la recuperación de datos específicos y 
+la capacidad generativa avanzada de los LLM.
+
+\subsection{Fase de recuperación}
+
+La recuperación de información es una pieza clave del sistema RAG, encargada de encontrar los fragmentos más relevantes de la base de datos vectorial.
+
+Para ello se desarrolló la clase \textit{Retriever}, cuyo código se muestra a continuación. 
+
+\begin{lstlisting}[label=cod:retriever,caption=Clase \textit{Retriever}.]
+	class Retriever():
+	
+		def __init__(self):
+			# Embeddings model instantiation
+			if os.getenv("EMBEDDINGS_MODEL") == "openai":
+				self.embeddings = AzureOpenAIEmbeddings(model="ada-002", openai_api_version="2024-06-01")
+			elif os.getenv("EMBEDDINGS_MODEL") == "google":    
+				self.embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+			else:
+				self.embeddings = AzureOpenAIEmbeddings(model="ada-002", openai_api_version="2024-06-01")
+	
+			# Vector store instantiation
+			self.vstore = AzureSearch(
+				azure_search_endpoint=os.getenv("AZURE_SEARCH_URI"),
+				azure_search_key=os.getenv("AZURE_SEARCH_KEY"),
+				index_name=os.getenv("DB_INDEX"),
+				embedding_function=self.embeddings.embed_query
+			)
+	
+		def invoke(self, query):
+			# Run a similarity search on the database for the given query
+			docs = self.vstore.similarity_search(query['input'], k=3)
+			print(docs)
+			return self.format_docs(docs)
+		
+		def format_docs(self, docs):
+			# Put together the results of the similarity search into one chunk of text
+			return "\n\n".join(doc.page_content for doc in docs)
+\end{lstlisting}
+
+En el constructor se inicializa el modelo de \textit{embeddings} y se establece la conexión con la base de datos vectorial en Azure Search.
+
+El método \textit{invoke} realiza una búsqueda semántica en la base de datos y devuelve los documentos más relevantes. El método utiliza la 
+función \textit{similarity\_search} para recuperar los tres fragmentos más relevantes (k=3). Posteriormente, los fragmentos se 
+formatean a través del método \textit{format\_docs} en un texto único que servirá como contexto para la fase de generación. Esta 
+estructura garantiza que el modelo de generación reciba un contexto consolidado y relevante.
+
+\subsection{Fase de generación}
+
+La fase de generación utiliza los fragmentos recuperados para producir respuestas contextuales a las consultas del usuario.
+
+Para ello se desarrolló la clase \textit{Generator}, cuyo código se muestra a continuación.
+
+\begin{lstlisting}[label=cod:generator,caption=Clase \textit{Generator}.]
+	class Generator():
+
+		def __init__(self, retriever):
+			# Instantiate a pre-trained Large Language Model from Azure OpenAI
+			self.llm = AzureChatOpenAI(
+				deployment_name="gpt-4o",
+				api_version="2023-06-01-preview"
+			)
+
+			# The system prompt guides the model on how to respond
+			self.system_prompt = (
+				"You are an AI assistant for question-answering tasks."
+				"You are able to answer questions related to Fabian's final project for his master degree in AI."
+				"If someone asks, 'What can I ask you about?' or other similar questions, respond with the above topics."
+				"If you're unsure, use the following pieces of retrieved context to answer the question." 
+				"If you don't know the answer, say that you don't know."
+				"If a question does not relate to Fabian's project, respond with: 'This question falls outside of my knowledge base'." 
+				"Use three sentences maximum and keep the answer concise."
+				"\n\n"
+				"{context}"
+			)
+
+			# The prompt puts together the system prompt with the user question
+			self.prompt = ChatPromptTemplate.from_messages(
+				[
+					("system", self.system_prompt),
+					("human", "{question}"),
+				]
+			)
+
+			# The parser just plucks the string content out of the LLM's output message
+			self.parser = StrOutputParser()
+
+			# The chain orchestrates the whole flow
+			self.rag_chain = (
+				{"context": retriever.invoke, "question": RunnablePassthrough()}
+				| self.prompt
+				| self.llm
+				| self.parser
+			)
+
+
+		def invoke(self, user_question):
+			# Run the chain and returns the answer generated by the LLM
+			answer = self.rag_chain.invoke({"input": user_question})
+			return answer
+\end{lstlisting}
+
+En el constructor se inicializan todos los componentes fundamentales: un modelo de lenguaje grande en Azure OpenAI,
+el \textit{prompt} del sistema, y una cadena (\textit{rag\_chain}) que organiza el flujo completo de la consulta, 
+desde la recuperación de fragmentos hasta la generación de la respuesta. Esta estructura 
+garantiza que los datos recuperados se integren con la consulta del usuario antes de pasar al modelo generativo.
+
+El \textit{prompt} establece las instrucciones que guían al modelo en la generación de respuestas, al definir 
+tanto el tono como las reglas que debe seguir. Este está diseñado para:
+
+\begin{enumerate}
+	\item Concientizar al chatbot sobre su dominio de conocimiento.
+    \item Incluir solo información del contexto recuperado.
+    \item Evitar responder a consultas fuera del dominio del chatbot.
+    \item Limitar las respuestas a tres oraciones.
+\end{enumerate}
+
+El método \textit{invoke} utiliza la cadena para procesar la consulta del usuario y generar la respuesta final.
 
 %---------------------------------------------------------------------------------------
 \section{API}
