@@ -4,7 +4,7 @@
 
 %----------------------------------------------------------------------------------------
 
-Este capítulo tiene como objetivo presentar las técnicas y herramientas clave utilizadas en el 
+Este capítulo presenta las técnicas y herramientas clave utilizadas en el 
 desarrollo de este trabajo. Se analizan los enfoques fundamentales para el procesamiento de 
 lenguaje natural, junto con los modelos, frameworks e infraestructura necesarios para 
 construir un sistema de recuperación de información eficiente y escalable. Este recorrido 
@@ -37,7 +37,7 @@ Para conservar el significado, es necesario generar vectores donde las relacione
 del contenido. Para ello, se emplea un modelo de \textit{embeddings} pre-entrenado, que produce una representación compacta 
 de los datos mientras mantiene sus características semánticas. El objetivo es capturar el significado o las relaciones 
 semánticas entre los puntos de datos, de modo que los elementos similares se encuentren cercanos en el espacio vectorial y los disímiles estén alejados. 
-Por ejemplo, considerando las palabras ``rey'' y ``reina'', un \textit{embedding} podría mapear estas palabras en vectores de modo 
+Por ejemplo, si se consideran las palabras ``rey'' y ``reina'', un \textit{embedding} podría mapear estas palabras en vectores de modo 
 que la diferencia entre ``rey' y ``reina'' sea similar a la diferencia entre ``hombre'' y ``mujer'', y reflejar así las 
 relaciones semánticas subyacentes.
 
@@ -71,7 +71,7 @@ algunos de los modelos más relevantes en la actualidad \citep{website:lifearchi
 
 \begin{table}[h]
 	\centering
-	\caption[Modelos LLM disponibles en el mercado]{Modelos LLM disponibles en el mercado}
+	\caption[Modelos LLM disponibles en el mercado]{Modelos LLM disponibles en el mercado.}
 	\begin{tabular}{l c c c}    
 		\toprule
 		\textbf{Modelo} 	 & \textbf{Creador} 	& \textbf{Año de publicación}  & \textbf{Cant. de parámetros (aprox.)}\\
@@ -102,7 +102,7 @@ A continuación se mencionan las principales diferencias entre los modelos grand
 modelos tradicionales:
 
 \begin{itemize}
-	\item Los LLM pueden adaptarse a nuevas tareas simplemente utilizando ejemplos en el \textit{prompt}, 
+	\item Los LLM pueden adaptarse a nuevas tareas simplemente con el empleo de ejemplos en el \textit{prompt}, 
 	sin necesidad de modificar sus parámetros o re-entrenar. Esto contrasta con los modelos tradicionales, 
 	que requieren grandes conjuntos de datos etiquetados y re-entrenarse cada vez que se incorporan nuevas tareas.
 	\item Comprenden instrucciones en lenguaje natural, lo que les permite seguir indicaciones complejas e 
@@ -153,17 +153,17 @@ entre las capacidades generales del modelo y la especificidad requerida en el co
 %----------------------------------------------------------------------------------------
 \section{Bases de datos vectoriales}
 
-Una base de datos de vectorial \citep{article:vector-db} es una base de datos diseñada para almacenar y gestionar \textit{embeddings}. Esta
+Una base de datos de vectorial \citep{article:vector-db} es un sistema diseñado para almacenar y gestionar \textit{embeddings}. Esta
 cumple un papel fundamental en la etapa de recuperación de información.
 
 A diferencia de las bases de datos tradicionales, en las que las consultas suelen coincidir exactamente con los valores almacenados, 
 las bases de datos vectoriales aplican métricas de similitud para identificar el vector más cercano a la consulta. 
-El proceso de recuperación se realiza calculando la distancia entre 
+El proceso de recuperación se realiza mediante el cálculo de la distancia entre 
 el vector de la consulta y los vectores almacenados en la base de datos. Los fragmentos con menor distancia al vector 
 de la consulta son seleccionados como los más relevantes y luego utilizados como insumo en la fase de generación de la respuesta. 
 
 Para seleccionar la base de datos vectorial más adecuada para este trabajo, se exploraron varias opciones 
-disponibles en el mercado, evaluando aspectos como el rendimiento y la facilidad de integración con el chatbot. 
+disponibles en el mercado y se evaluaron aspectos como el rendimiento y la facilidad de integración con el chatbot. 
 Los resultados de estos ensayos se describen en el capítulo \ref{Chapter4}.
 
 %----------------------------------------------------------------------------------------
@@ -173,11 +173,11 @@ En el desarrollo de este trabajo se utilizaron una serie frameworks que facilita
 cada parte del sistema. A continuación, se detallan sus principales características y su rol específico en el producto final.
 
 \begin{itemize}
-	\item LangChain: este framework fue fundamental para la construcción del sistema RAG, ya que permite una gestión 
+	\item LangChain: este framework es fundamental para la construcción del sistema RAG, ya que permite una gestión 
 	eficiente de flujos de trabajo con modelos de lenguaje. LangChain facilita la integración de modelos LLM con fuentes de datos externas, 
 	y además ofrece herramientas para diseñar flujos complejos 
 	que manejan las consultas del usuario, el proceso de recuperación y la generación de respuestas \citep{website:langchain}.
-	\item FastAPI: se utilizó para construir la API que conecta los componentes del sistema y gestiona las solicitudes del usuario. 
+	\item FastAPI: se utiliza para construir la API que conecta los componentes del sistema y gestiona las solicitudes del usuario. 
 	Este framework, reconocido por su alto rendimiento y facilidad de uso, permitió desarrollar una API eficiente y escalable que procesa 
 	las consultas en tiempo real. FastAPI facilita el manejo de solicitudes asíncronas y permite definir de manera clara los puntos 
 	de conexión de la API, asegurando que las interacciones entre el frontend y el backend se 
@@ -199,7 +199,7 @@ escalables y seguras para gestionar datos y modelos, lo que facilita la integrac
 Los recursos específicos de Azure utilizados incluyen:
 
 \begin{itemize}
-	\item Azure OpenAI: este recurso se utilizó para desplegar el modelo de lenguaje LLM y el modelo de \textit{embeddings}, 
+	\item Azure OpenAI: este recurso se utilizó para deployar el modelo de lenguaje LLM y el modelo de \textit{embeddings}, 
 	lo que provee la capacidad de procesamiento de lenguaje natural avanzada requerida por el sistema \citep{website:azure-openai}.
 	\item Azure AI Search: utilizado como base de datos vectorial, este servicio permite almacenar y recuperar \textit{embeddings} 
 	mediante búsquedas de similitud \citep{website:ai-search}.

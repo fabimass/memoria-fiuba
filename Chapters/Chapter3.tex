@@ -56,10 +56,10 @@ En primer lugar, los usuarios interactúan con el chatbot a través de una inter
 donde consultan por la información deseada. Estas consultas son luego transferidas al servidor (Azure App Service) a través de una API desarrollada 
 con la librería FastAPI. Una vez allí, se realiza un proceso de búsqueda por similitud que toma la solicitud del usuario y la compara con la información
 disponible en la base de datos (Azure AI Search), con el objetivo de identificar aquellos fragmentos más relevantes. Previamente, un administrador
-debe haber cargado aquellos documentos que conforman la base de conocimiento del chatbot en un repositorio de GitHub, tras lo cual se ejecuta una 
+debe haber cargado aquellos documentos que conforman la base de conocimiento del chatbot en un repositorio de GitHub. Luego, se ejecuta una 
 automatización que los procesa y los envía a la base de datos.
 
-Finalmente, la consulta del usuario y los fragmentos relevantes se envían al modelo LLM (desplegado en el servicio Azure OpenAI), que genera una 
+Finalmente, la consulta del usuario y los fragmentos relevantes se envían al modelo LLM (deployado en el servicio Azure OpenAI), que genera una 
 respuesta contextualizada, que es devuelta a la interfaz gráfica para ser presentada al usuario.
 
 Además, se incluye una pequeña base de datos adicional (Azure Table Storage) que se utiliza para guardar el feedback de los usuarios, 
@@ -95,7 +95,7 @@ Como medida de seguridad, se configuraron reglas de red para restringir el acces
 de direcciones IP del backend alojado en Azure App Service. Esto asegura que solo las solicitudes provenientes de la 
 aplicación puedan acceder al modelo de lenguaje, lo que protege el servicio de accesos no autorizados.
 
-Una vez desplegado el recurso, fue necesario seleccionar y desplegar los modelos específicos requeridos por el chatbot. 
+Una vez deployado el recurso, fue necesario seleccionar y deployar los modelos específicos requeridos por el chatbot. 
 En este caso, se optó por los siguientes modelos:
 
 \begin{itemize}
@@ -112,7 +112,7 @@ con Azure OpenAI. Estos datos se almacenan en el backend como variables de entor
 
 \begin{table}[h]
 	\centering
-	\caption[Configuración de Azure OpenAI]{Configuración de Azure OpenAI}
+	\caption[Configuración de Azure OpenAI]{Configuración de Azure OpenAI.}
 	\begin{tabular}{l l}    
 		\toprule
 		\textbf{Configuración} 	 & \textbf{Detalles} 	     \\
@@ -120,7 +120,7 @@ con Azure OpenAI. Estos datos se almacenan en el backend como variables de entor
 		Región                   &	East US 				 \\		
 		Nivel de precios         & Standard S0				 \\
 		Reglas de firewall       & Rango IP de App Service   \\
-        Modelos desplegados	     & - gpt-4o				     \\
+        Modelos deployados	     & - gpt-4o				     \\
             	                 & - text-embeddings-ada-002 \\
         Credenciales	         & Endpoint y key 		     \\
 		\bottomrule
@@ -147,7 +147,7 @@ Es importante destacar que no es necesario crear un índice manualmente en esta 
 
 \begin{table}[h]
 	\centering
-	\caption[Configuración de Azure AI Search]{Configuración de Azure AI Search}
+	\caption[Configuración de Azure AI Search]{Configuración de Azure AI Search.}
 	\begin{tabular}{l l}    
 		\toprule
 		\textbf{Configuración} 	 & \textbf{Detalles} 	   \\
@@ -165,7 +165,7 @@ Es importante destacar que no es necesario crear un índice manualmente en esta 
 \subsection{App Service}
 
 Este servicio ofrece una plataforma completamente administrada donde es posible alojar una aplicación avanzada en la nube 
-sin necesidad de manejar la infraestructura asociada. En este caso se utilizó para desplegar el backend del chatbot.
+sin necesidad de manejar la infraestructura asociada. En este caso se utilizó para deployar el backend del chatbot.
 
 La tabla \ref{tab:config-app-service} resume la configuración principal del servicio. En primer lugar, se seleccionó un App Service Plan de categoría \textit{Basic B3}, que proporciona un poder de procesamiento de 
 4 vCPU, 7 GB de memoria RAM, 10 GB de almacenamiento remoto, y permite escalar hasta 3 instancias en caso de ser necesario. 
@@ -177,7 +177,7 @@ variables incluyen las claves y los puntos de conexión de los servicios de Azur
 
 \begin{table}[h]
 	\centering
-	\caption[Variables de entorno en el backend]{Variables de entorno en el backend}
+	\caption[Variables de entorno en el backend]{Variables de entorno en el backend.}
 	\begin{tabular}{l l}    
 		\toprule
 		\textbf{Variable de entorno}  & \textbf{Descripción} 	                          \\
@@ -201,7 +201,7 @@ y la supervisión continua.
 
 \begin{table}[h]
 	\centering
-	\caption[Configuración de Azure App Service]{Configuración de Azure App Service}
+	\caption[Configuración de Azure App Service]{Configuración de Azure App Service.}
 	\begin{tabular}{l l}    
 		\toprule
 		\textbf{Configuración} & \textbf{Detalles} 	\\
@@ -234,7 +234,7 @@ permitiendo la autenticación y el despliegue seguro desde GitHub.
 
 \begin{table}[h]
 	\centering
-	\caption[Configuración de Azure App Service]{Configuración de Azure App Service}
+	\caption[Configuración de Azure App Service]{Configuración de Azure App Service.}
 	\begin{tabular}{l l}    
 		\toprule
 		\textbf{Configuración} 	& \textbf{Detalles} \\
@@ -254,19 +254,19 @@ permitiendo la autenticación y el despliegue seguro desde GitHub.
 Azure Table Storage es un servicio que almacena datos estructurados no relacionales (también conocidos como datos NoSQL) en la nube, que almacena claves/atributos 
 con un diseño sin esquemas. En el contexto de este trabajo se utilizó para almacenar el feedback de los usuarios acerca de las respuestas provistas por el chatbot.
 
-La tabla \ref{tab:config-table-storage} resume la configuración principal de este recurso. Primeramente, fue necesario desplegar una Storage Account en la región \textit{East US}, para así mantener la consistencia con los demás 
+La tabla \ref{tab:config-table-storage} resume la configuración principal de este recurso. Primeramente, fue necesario deployar una Storage Account en la región \textit{East US}, para así mantener la consistencia con los demás 
 recursos del sistema. Se seleccionó una performance de tipo \textit{Standard}, adecuada para las necesidades de la aplicación.
 
 En cuanto a la redundancia de los datos, se eligió la oferta de redundancia local, una alternativa rentable que asegura que los datos 
 estén replicados dentro de un único centro de datos en la misma región, reduciendo costos sin comprometer la disponibilidad básica.
 
-Una vez que la cuenta de almacenamiento fue desplegada, se procedió a crear la tabla que almacenará los resultados 
+Una vez que la cuenta de almacenamiento fue deployada, se procedió a crear la tabla que almacenará los resultados 
 recopilados a través del sistema. Es importante obtener la \textit{connection string} asociada al recurso, ya que será 
 necesaria para conectar la aplicación con la tabla y permitir el acceso programático. 
 
 \begin{table}[h]
 	\centering
-	\caption[Configuración de Azure Table Storage]{Configuración de Azure Table Storage}
+	\caption[Configuración de Azure Table Storage]{Configuración de Azure Table Storage.}
 	\begin{tabular}{l l}    
 		\toprule
 		\textbf{Configuración} 	 & \textbf{Detalles} 	      \\
@@ -332,8 +332,8 @@ los documentos de un índice específico.
 			print(f"Failed to delete documents. Status code: {response.status_code}, Response: {response.text}")
 \end{lstlisting}
 
-Este paso es esencial para asegurar que los datos insertados sean consistentes con los documentos procesados más recientemente, evitando 
-duplicación de información y permitiendo un índice limpio.
+Este paso es esencial para asegurar que los datos insertados sean consistentes con los documentos procesados más recientemente, al evitar 
+duplicación de información.
 
 \subsection{Configuración del modelo de \textit{embeddings}}
 
@@ -390,8 +390,8 @@ cada archivo se divide en fragmentos utilizando el divisor de texto configurado 
 
 \subsection{Inserción en lotes}
 
-Para evitar alcanzar el límite de uso de la API, los fragmentos se insertan en el índice en lotes pequeños, con una demora entre cada lote. 
-La función \textit{batch\_insert\_chunks} controla esta inserción en lotes, estableciendo un tamaño de lote y un tiempo de espera entre lotes.
+Para evitar alcanzar el límite de uso de la API, los fragmentos se insertan en el índice en lotes pequeños, con una demora entre cada de por medio. 
+La función \textit{batch\_insert\_chunks} controla esta inserción, estableciendo un tamaño de lote y un tiempo de espera.
 
 \begin{lstlisting}[label=cod:update-db-6,caption=Inserción en lotes.]
 	def batch_insert_chunks(chunks,batch_size=5,delay_between_batches=3):
@@ -421,7 +421,7 @@ El sistema RAG se compone de dos etapas principales:
 	\item Fase de recuperación: Se realiza una búsqueda semántica en la base de datos vectorial para identificar 
 	los fragmentos más relevantes a partir de una consulta.
 	\item Fase de generación: Los fragmentos recuperados se combinan con la consulta del usuario y se utilizan 
-	como contexto para un modelo de lenguaje grande (LLM), que genera una respuesta contextualizada.
+	como contexto para un modelo de lenguaje, que genera una respuesta contextualizada.
 \end{itemize}
 
 Este enfoque aprovecha lo mejor de ambos mundos: la precisión en la recuperación de datos específicos y 
@@ -429,15 +429,12 @@ la capacidad generativa avanzada de los LLM.
 
 \subsection{Fase de recuperación}
 
-La recuperación de información es una pieza clave del sistema RAG, encargada de encontrar los fragmentos más relevantes de la base de datos vectorial.
-
-Para ello se desarrolló la clase \textit{Retriever}, cuyo código se muestra a continuación. 
+Esta fase se encarga de encontrar los fragmentos más relevantes de la base de datos vectorial. Para ello se desarrolló la clase \textit{Retriever}, cuyo código se muestra a continuación. 
 
 \begin{lstlisting}[label=cod:retriever,caption=Clase \textit{Retriever}.]
 	class Retriever():
 	
 		def __init__(self):
-			# Embeddings model instantiation
 			if os.getenv("EMBEDDINGS_MODEL") == "openai":
 				self.embeddings = AzureOpenAIEmbeddings(model="ada-002", openai_api_version="2024-06-01")
 			elif os.getenv("EMBEDDINGS_MODEL") == "google":    
@@ -445,7 +442,6 @@ Para ello se desarrolló la clase \textit{Retriever}, cuyo código se muestra a 
 			else:
 				self.embeddings = AzureOpenAIEmbeddings(model="ada-002", openai_api_version="2024-06-01")
 	
-			# Vector store instantiation
 			self.vstore = AzureSearch(
 				azure_search_endpoint=os.getenv("AZURE_SEARCH_URI"),
 				azure_search_key=os.getenv("AZURE_SEARCH_KEY"),
@@ -454,13 +450,11 @@ Para ello se desarrolló la clase \textit{Retriever}, cuyo código se muestra a 
 			)
 	
 		def invoke(self, query):
-			# Run a similarity search on the database for the given query
 			docs = self.vstore.similarity_search(query['input'], k=3)
 			print(docs)
 			return self.format_docs(docs)
 		
 		def format_docs(self, docs):
-			# Put together the results of the similarity search into one chunk of text
 			return "\n\n".join(doc.page_content for doc in docs)
 \end{lstlisting}
 
@@ -481,13 +475,11 @@ Para ello se desarrolló la clase \textit{Generator}, cuyo código se muestra a 
 	class Generator():
 
 		def __init__(self, retriever):
-			# Instantiate a pre-trained Large Language Model from Azure OpenAI
 			self.llm = AzureChatOpenAI(
 				deployment_name="gpt-4o",
 				api_version="2023-06-01-preview"
 			)
 
-			# The system prompt guides the model on how to respond
 			self.system_prompt = (
 				"You are an AI assistant for question-answering tasks."
 				"You are able to answer questions related to Fabian's final project for his master degree in AI."
@@ -500,7 +492,6 @@ Para ello se desarrolló la clase \textit{Generator}, cuyo código se muestra a 
 				"{context}"
 			)
 
-			# The prompt puts together the system prompt with the user question
 			self.prompt = ChatPromptTemplate.from_messages(
 				[
 					("system", self.system_prompt),
@@ -508,10 +499,8 @@ Para ello se desarrolló la clase \textit{Generator}, cuyo código se muestra a 
 				]
 			)
 
-			# The parser just plucks the string content out of the LLM's output message
 			self.parser = StrOutputParser()
 
-			# The chain orchestrates the whole flow
 			self.rag_chain = (
 				{"context": retriever.invoke, "question": RunnablePassthrough()}
 				| self.prompt
@@ -519,9 +508,7 @@ Para ello se desarrolló la clase \textit{Generator}, cuyo código se muestra a 
 				| self.parser
 			)
 
-
 		def invoke(self, user_question):
-			# Run the chain and returns the answer generated by the LLM
 			answer = self.rag_chain.invoke({"input": user_question})
 			return answer
 \end{lstlisting}
@@ -551,7 +538,7 @@ tabla \ref{tab:api} detalla los endpoints implementados.
 
 \begin{table}[h]
 	\centering
-	\caption[Diseño de la API]{Diseño de la API}
+	\caption[Diseño de la API]{Diseño de la API.}
 	\begin{tabular}{l c c}    
 		\toprule
 		\textbf{Endpoint} 	     & \textbf{Método} 	& \textbf{Ruta}  \\
