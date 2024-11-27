@@ -196,7 +196,7 @@ variables incluyen las claves y los puntos de conexión de los servicios de Azur
 
 Para asegurar un monitoreo efectivo de la aplicación, se habilitó la integración con Application Insights, lo que permite un 
 seguimiento detallado de las métricas de rendimiento y de uso. Adicionalmente, se configuró la opción de \textit{application logging}, 
-de modo que los logs de la aplicación fueran visualizados directamente desde la terminal del App Service, facilitando la depuración 
+de modo que los logs de la aplicación fueran visualizados directamente desde la terminal del App Service, lo que facilita la depuración 
 y la supervisión continua.
 
 \begin{table}[h]
@@ -229,8 +229,8 @@ la versión \textit{Standard}. A diferencia de otros servicios en Azure, las Sta
 Además, ya que todas las conexiones con otros servicios son manejadas exclusivamente por el backend, la única variable de entorno requerida 
 es la URL de la API, lo que simplifica la configuración.
 
-Es importante obtener el \textit{deployment token} asociado al recurso, que será necesario más adelante para configurar el pipeline de despliegue automático, 
-permitiendo la autenticación y el despliegue seguro desde GitHub.
+Es importante obtener el \textit{deployment token} asociado al recurso, que será necesario más adelante al configurar el pipeline de despliegue automático 
+para permitir la autenticación y el despliegue seguro desde GitHub.
 
 \begin{table}[h]
 	\centering
@@ -258,7 +258,7 @@ La tabla \ref{tab:config-table-storage} resume la configuración principal de es
 recursos del sistema. Se seleccionó una performance de tipo \textit{Standard}, adecuada para las necesidades de la aplicación.
 
 En cuanto a la redundancia de los datos, se eligió la oferta de redundancia local, una alternativa rentable que asegura que los datos 
-estén replicados dentro de un único centro de datos en la misma región, reduciendo costos sin comprometer la disponibilidad básica.
+estén replicados dentro de un único centro de datos en la misma región, que reduce costos sin comprometer la disponibilidad básica.
 
 Una vez que la cuenta de almacenamiento fue deployada, se procedió a crear la tabla que almacenará los resultados 
 recopilados a través del sistema. Es importante obtener la \textit{connection string} asociada al recurso, ya que será 
@@ -315,7 +315,7 @@ para el procesamiento de texto en lenguaje natural, al proporcionar herramientas
 \subsection{Configuración del índice de búsqueda}
 
 Antes de insertar documentos en la base de datos, es necesario realizar una limpieza para eliminar cualquier dato previo. La función 
-\textit{delete\_index} se encarga de esta tarea, enviando una solicitud de tipo \textit{DELETE} a la API de Azure Search para borrar todos 
+\textit{delete\_index} se encarga de esta tarea, al enviar una solicitud de tipo \textit{DELETE} a la API de Azure Search para borrar todos 
 los documentos de un índice específico.
 
 \begin{lstlisting}[label=cod:update-db-2,caption=Configuración del índice de búsqueda.]
@@ -367,12 +367,12 @@ Este objeto se utiliza posteriormente en el flujo para agregar documentos en el 
 
 \subsection{Divisor de texto}
 
-Para manejar eficientemente documentos extensos, el script utiliza un divisor de texto para separar el contenido en fragmentos manejables 
-de hasta 512 caracteres con un solapamiento de 64 caracteres entre fragmentos consecutivos. Este solapamiento asegura la continuidad del
-contexto en los fragmentos resultantes.
+El script emplea un divisor de texto para procesar documentos extensos de manera eficiente. Este divisor separa el contenido en 
+fragmentos manejables de hasta 512 caracteres. Además, aplica un solapamiento de 64 caracteres entre fragmentos consecutivos. Este 
+solapamiento garantiza la continuidad del contexto en los fragmentos generados.
 
 El script busca archivos en la carpeta \textit{knowledge-base} y aplica distintos \textit{loaders} según el tipo de archivo (PDF o Markdown). Luego, 
-cada archivo se divide en fragmentos utilizando el divisor de texto configurado previamente.
+cada archivo se divide en fragmentos por medio del divisor de texto configurado previamente.
 
 \begin{lstlisting}[label=cod:update-db-5,caption=Divisor de texto.]
 	splitter = RecursiveCharacterTextSplitter(chunk_size=512, chunk_overlap=64)
@@ -391,7 +391,7 @@ cada archivo se divide en fragmentos utilizando el divisor de texto configurado 
 \subsection{Inserción en lotes}
 
 Para evitar alcanzar el límite de uso de la API, los fragmentos se insertan en el índice en lotes pequeños, con una demora entre cada de por medio. 
-La función \textit{batch\_insert\_chunks} controla esta inserción, estableciendo un tamaño de lote y un tiempo de espera.
+La función \textit{batch\_insert\_chunks} controla esta inserción, al establecer un tamaño de lote y un tiempo de espera.
 
 \begin{lstlisting}[label=cod:update-db-6,caption=Inserción en lotes.]
 	def batch_insert_chunks(chunks,batch_size=5,delay_between_batches=3):
@@ -418,9 +418,9 @@ el flujo debido a límites de solicitud.
 El sistema RAG se compone de dos etapas principales:
 
 \begin{itemize}
-	\item Fase de recuperación: Se realiza una búsqueda semántica en la base de datos vectorial para identificar 
+	\item Fase de recuperación: se realiza una búsqueda semántica en la base de datos vectorial para identificar 
 	los fragmentos más relevantes a partir de una consulta.
-	\item Fase de generación: Los fragmentos recuperados se combinan con la consulta del usuario y se utilizan 
+	\item Fase de generación: los fragmentos recuperados se combinan con la consulta del usuario y se utilizan 
 	como contexto para un modelo de lenguaje, que genera una respuesta contextualizada.
 \end{itemize}
 
@@ -513,10 +513,8 @@ Para ello se desarrolló la clase \textit{Generator}, cuyo código se muestra a 
 			return answer
 \end{lstlisting}
 
-En el constructor se inicializan todos los componentes fundamentales: un modelo de lenguaje grande en Azure OpenAI,
-el \textit{prompt} del sistema, y una cadena (\textit{rag\_chain}) que organiza el flujo completo de la consulta, 
-desde la recuperación de fragmentos hasta la generación de la respuesta. Esta estructura 
-garantiza que los datos recuperados se integren con la consulta del usuario antes de pasar al modelo generativo.
+En el constructor se inicializan los componentes clave: un modelo de lenguaje en Azure OpenAI, 
+el \textit{prompt} del sistema y una cadena que gestiona el flujo desde la recuperación hasta la respuesta.
 
 El \textit{prompt} establece las instrucciones que guían al modelo en la generación de respuestas, al definir 
 tanto el tono como las reglas que debe seguir. Este está diseñado para:
@@ -534,7 +532,7 @@ El método \textit{invoke} utiliza la cadena para procesar la consulta del usuar
 \section{Implementación de la API}
 
 La API desarrollada con FastAPI es el puente entre la interfaz de usuario y las funcionalidades del sistema. La 
-tabla \ref{tab:api} detalla los endpoints implementados.
+tabla \ref{tab:api} detalla los \textit{endpoints} implementados.
 
 \begin{table}[h]
 	\centering
@@ -553,11 +551,11 @@ tabla \ref{tab:api} detalla los endpoints implementados.
 	\label{tab:api}
 \end{table}
 
-\subsection{Endpoint de generación de respuestas}
+\subsection{\textit{Endpoint} de generación de respuestas}
 
-Este endpoint recibe la consulta del usuario e invoca el proceso RAG para generar una respuesta en lenguaje natural.
+Este \textit{endpoint} recibe la consulta del usuario e invoca el proceso RAG para generar una respuesta en lenguaje natural.
 
-\begin{lstlisting}[label=cod:api-1,caption=Endpoint de generación de respuestas.]
+\begin{lstlisting}[label=cod:api-1,caption=\textit{Endpoint} de generación de respuestas.]
 	@app.post("/api/ask")
 	def generate_answer(body: Prompt):
 		try:
@@ -567,13 +565,13 @@ Este endpoint recibe la consulta del usuario e invoca el proceso RAG para genera
 			raise HTTPException(status_code=500, detail=f"Error: {e}")	
 \end{lstlisting}
 
-\subsection{Endpoint de registro de feedback}
+\subsection{\textit{Endpoint} de registro de opiniones}
 
-Este endpoint permite a los usuarios enviar su opinión sobre una interacción, es decir, si están o no satisfechos con 
+Este \textit{endpoint} permite a los usuarios enviar su opinión sobre una interacción, es decir, si están o no satisfechos con 
 la respuesta entregada por el chatbot. Los datos se almacenan en Azure Table Storage.
-El propósito es capturar la percepción del usuario sobre las respuestas generadas, permitiendo evaluar y mejorar el sistema.
+El propósito es capturar la percepción del usuario sobre las respuestas generadas, con el objetivo de evaluar y mejorar el sistema.
 
-\begin{lstlisting}[label=cod:api-2,caption=Endpoint de registro de feedback.]
+\begin{lstlisting}[label=cod:api-2,caption=\textit{Endpoint} de registro de opiniones.]
 	@app.post("/api/feedback")
 	async def store_feedback(feedback: Feedback):
 		entity = TableEntity()
@@ -590,13 +588,13 @@ El propósito es capturar la percepción del usuario sobre las respuestas genera
 	
 \end{lstlisting}
 
-\subsection{Endpoint de consulta de feedback}
+\subsection{\textit{Endpoint} de consulta de opiniones}
 
-Este endpoint retorna estadísticas sobre el feedback registrado por los usuarios, al indicar la cantidad de interacciones 
+Este \textit{endpoint} retorna estadísticas sobre el feedback registrado por los usuarios, al indicar la cantidad de interacciones 
 positivas y negativas. El propósito es ofrecer estadísticas que permitan monitorear el rendimiento del sistema y 
 la satisfacción del usuario.
 
-\begin{lstlisting}[label=cod:api-3,caption=Endpoint de consulta de feedback.]
+\begin{lstlisting}[label=cod:api-3,caption=\textit{Endpoint} de consulta de opiniones.]
 	@app.get("/api/feedback")
 	async def get_feedback_count():
 		try:
@@ -608,12 +606,12 @@ la satisfacción del usuario.
 			raise HTTPException(status_code=500, detail=f"Error: {e}")	
 \end{lstlisting}
 
-\subsection{Endpoint de prueba}
+\subsection{\textit{Endpoint} de prueba}
 
-Este endpoint verifica que la API esté operativa devolviendo una respuesta sencilla. Su propósito es 
-validar la conectividad con la API y confirmar que el sistema está funcionando correctamente.
+Este \textit{endpoint} verifica que la API está operativa y devuelve una respuesta sencilla. Su propósito es 
+validar la conectividad con la API y confirmar el correcto funcionamiento del sistema.
 
-\begin{lstlisting}[label=cod:api-4,caption=Endpoint de prueba.]
+\begin{lstlisting}[label=cod:api-4,caption=\textit{Endpoint} de prueba.]
 	@app.get("/api/ping")
 	def ping():
 		return "pong"
